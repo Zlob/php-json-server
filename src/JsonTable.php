@@ -4,10 +4,22 @@ namespace JsonServer;
 
 use Doctrine\Common\Inflector;
 
+/**
+ * Class JsonTable
+ * @package JsonServer
+ */
 class JsonTable implements \ArrayAccess
 {
+    /**
+     * @var array
+     * Array of table rows
+     */
     private $rows = [];
 
+    /**
+     * create a new JsonTable instance
+     * @param $data
+     */
     public function __construct($data)
     {
         if (is_array($data)) {
@@ -26,6 +38,12 @@ class JsonTable implements \ArrayAccess
 
     }
 
+    /**
+     * Filter table rows by $key with $value
+     * @param $key
+     * @param $value
+     * @return JsonTable
+     */
     public function where($key, $value)
     {
         return $this->filter(function ($item) use ($key, $value) {
@@ -33,6 +51,11 @@ class JsonTable implements \ArrayAccess
         });
     }
 
+    /**
+     * Return row whth id $id
+     * @param $id
+     * @return null
+     */
     public function find($id)
     {
         $result = $this->filter(function ($item) use ($id) {
@@ -46,6 +69,12 @@ class JsonTable implements \ArrayAccess
         }
     }
 
+    /**
+     * Filter rows by related entity id
+     * @param $parentName
+     * @param $parentId
+     * @return $this|JsonTable
+     */
     public function filterByParent($parentName, $parentId)
     {
         if ($parentName != null) {
@@ -54,6 +83,32 @@ class JsonTable implements \ArrayAccess
         return $this;
     }
 
+    /**
+     * Filter rows with callback function
+     * @param $callback
+     * @return static
+     */
+    private function filter($callback)
+    {
+        return new static(array_filter($this->rows, $callback));
+    }
+
+    /**
+     * return parant relation field in right form
+     * @param $parentName
+     * @return string
+     */
+    private function getParentKeyName($parentName)
+    {
+        //todo учет конфигов + тесты
+        $parentName = Inflector\Inflector::singularize($parentName);
+        return $parentName . "_id";
+    }
+
+    /**
+     * Return array representation of rows
+     * @return array
+     */
     public function toArray()
     {
         $result = [];
@@ -63,34 +118,38 @@ class JsonTable implements \ArrayAccess
         return $result;
     }
 
+    /**
+     * @param mixed $offset
+     * @return bool
+     */
     public function offsetExists($offset)
     {
         return array_key_exists($this->rows, $offset);
     }
 
+    /**
+     * @param mixed $offset
+     * @return mixed
+     */
     public function offsetGet($offset)
     {
         return $this->rows[$offset];
     }
 
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     */
     public function offsetSet($offset, $value)
     {
         $this->rows[] = $value;
     }
 
+    /**
+     * @param mixed $offset
+     */
     public function offsetUnset($offset)
     {
         unset($this->rows[$offset]);
-    }
-
-    private function filter($callback)
-    {
-        return new static(array_filter($this->rows, $callback));
-    }
-
-    private function getParentKeyName($parentName)
-    {
-        $parentName = Inflector\Inflector::singularize($parentName);
-        return $parentName . "_id";
     }
 }

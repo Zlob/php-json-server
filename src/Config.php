@@ -14,8 +14,7 @@ class Config implements \ArrayAccess
     /**
      * Create a new configuration repository.
      *
-     * @param  array  $items
-     * @return void
+     * @param  array $items
      */
     public function __construct(array $items = [])
     {

@@ -2,10 +2,22 @@
 
 namespace JsonServer;
 
+/**
+ * Class JsonDataBase
+ * @package JsonServer
+ */
 class JsonDataBase
 {
+    /**
+     * array of tables in DB
+     * @var array
+     */
     private $tables = [];
 
+    /**
+     * create instance of JsonDataBase
+     * @param $jsonString
+     */
     public function __construct($jsonString)
     {
         if (is_string($jsonString)) {
@@ -22,6 +34,11 @@ class JsonDataBase
         }
     }
 
+    /**
+     * return table
+     * @param $tableName
+     * @return mixed
+     */
     public function getTable($tableName)
     {
         if (array_key_exists($tableName, $this->tables)) {
