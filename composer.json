@@ -1,0 +1,40 @@
+{
+  "name": "Zlob/jsonServer",
+  "type": "library",
+  "description": "json server",
+  "keywords": ["json", "server"],
+  "homepage": "https://github.com/Zlob/super_closure",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Makin Vladislav",
+      "email": "vamakin@gmail.com",
+      "homepage": "https://github.com/Zlob",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.4",
+    "nikic/php-parser": "~1.0",
+    "doctrine/inflector": "^1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.0",
+    "codeclimate/php-test-reporter": "~0.1.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "JsonServer\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "JsonServer\\Test\\": "tests/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "2.1-dev"
+    }
+  }
+}

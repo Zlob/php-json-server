@@ -1,0 +1,5 @@
+{
+  "urlNamingForm" : "singular",
+  "tableNamingForm" : "plural",
+  "relationsNamingForm" : "singular"
+}
