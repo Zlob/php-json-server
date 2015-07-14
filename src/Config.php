@@ -1,24 +1,48 @@
 <?php
 
+
 namespace JsonServer;
 
 class Config implements \ArrayAccess
 {
     /**
      * All of the configuration items.
-     *
      * @var array
      */
     protected $items = [];
 
+
+    /**
+     * singleton instance
+     * @var null
+     */
+    private static $instance = null;
+
     /**
      * Create a new configuration repository.
-     *
      * @param  array $items
      */
-    public function __construct(array $items = [])
+    private function __construct(array $items = [])
     {
         $this->items = json_decode(file_get_contents(__DIR__.'/../config/config.json'), true);
+    }
+
+    /**
+     *
+     */
+    protected function __clone() {
+    }
+
+    /**
+     * return configuration instance
+     * @return Config
+     */
+    static public function getInstance() {
+        if(is_null(self::$instance))
+        {
+            self::$instance = new self();
+        }
+        return self::$instance;
     }
 
     /**
@@ -29,8 +53,7 @@ class Config implements \ArrayAccess
      */
     public function has($key)
     {
-        //todo
-//        return array_has($this->items, $key);
+        return array_key_exists($key, $this->items);
     }
 
     /**
