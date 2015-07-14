@@ -28,11 +28,6 @@ class JsonServer
      */
     private $jsonDb;
 
-    /**
-     * Config Instance
-     * @var Config
-     */
-    private $config;
 
     /**
      * create new JsonServer instance
@@ -40,7 +35,7 @@ class JsonServer
      */
     public function __construct($dbPath)
     {
-        $this->config = Config::getInstance();
+//        $this->config = Config::getInstance();
         $this->jsonDb = new JsonDataBase(file_get_contents($dbPath));
     }
 
@@ -157,8 +152,9 @@ class JsonServer
      * @return mixed
      */
     private function prepareForm($noun){
-        if (!($this->config['urlNamingForm'] === $this->config['tableNamingForm'] )){
-            $method = $this->config['tableNamingForm'].'ize';
+        if (!(Config::get('urlNamingForm') === Config::get('tableNamingForm'))){
+            //todo another method
+            $method = Config::get('tableNamingForm').'ize';
             return Inflector\Inflector::$method($noun);
         }
         else{

@@ -9,7 +9,7 @@ class Config implements \ArrayAccess
      * All of the configuration items.
      * @var array
      */
-    protected $items = [];
+    protected static $items = [];
 
 
     /**
@@ -20,11 +20,10 @@ class Config implements \ArrayAccess
 
     /**
      * Create a new configuration repository.
-     * @param  array $items
      */
-    private function __construct(array $items = [])
+    private function __construct()
     {
-        $this->items = json_decode(file_get_contents(__DIR__.'/../config/config.json'), true);
+        self::$items = json_decode(file_get_contents(__DIR__.'/../config/config.json'), true);
     }
 
     /**
@@ -51,9 +50,12 @@ class Config implements \ArrayAccess
      * @param  string  $key
      * @return bool
      */
-    public function has($key)
+    public static function has($key)
     {
-        return array_key_exists($key, $this->items);
+        if(is_null(self::$instance)){
+            self::getInstance();
+        }
+        return array_key_exists($key, self::$items);
     }
 
     /**
@@ -62,9 +64,12 @@ class Config implements \ArrayAccess
      * @param  string  $key
      * @return mixed
      */
-    public function get($key)
+    public static function get($key)
     {
-        return $this->items[$key];
+        if(is_null(self::$instance)){
+            self::getInstance();
+        }
+        return self::$items[$key];
     }
 
     /**
@@ -74,29 +79,32 @@ class Config implements \ArrayAccess
      * @param  mixed   $value
      * @return void
      */
-    public function set($key, $value = null)
+    public static function set($key, $value = null)
     {
-        $this->items[$key] = $value;
+        if(is_null(self::$instance)){
+            self::getInstance();
+        }
+        self::$items[$key] = $value;
     }
 
 
     public function offsetExists($offset)
     {
-        return array_key_exists($this->items, $offset);
+        return array_key_exists(self::$items, $offset);
     }
 
     public function offsetGet($offset)
     {
-        return $this->items[$offset];
+        return self::$items[$offset];
     }
 
     public function offsetSet($offset, $value)
     {
-        $this->items[] = $value;
+        self::$items[] = $value;
     }
 
     public function offsetUnset($offset)
     {
-        unset($this->items[$offset]);
+        unset(self::$items[$offset]);
     }
 }
