@@ -40,7 +40,7 @@ class JsonServer
      */
     public function __construct($dbPath)
     {
-        $this->config = new Config();
+        $this->config = Config::getInstance();
         $this->jsonDb = new JsonDataBase(file_get_contents($dbPath));
     }
 
@@ -114,7 +114,13 @@ class JsonServer
         } else {
             throw new \InvalidArgumentException('url should contain at least table name');
         }
-        return $result->toArray();
+        if($result){
+            return $result->toArray();
+        }
+        else{
+            return [];
+        }
+
     }
 
     /**
