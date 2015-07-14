@@ -3,26 +3,83 @@
 
 class JsonServerTest extends PHPUnit_Framework_TestCase
 {
-    protected $fixture;
-
-    protected function setUp()
+    /**
+     * @dataProvider requestProviderSingular
+     */
+    public function testRequestSingularSingular ($method, $url, $filter, $expected)
     {
-        require '/vendor/autoload.php';
-
-        $dbPath = getcwd().'/tests/db.json';
-
-        $this->fixture = new \JsonServer\JsonServer($dbPath);
-
+        $server = new \JsonServer\JsonServer(getcwd().'/tests/singularDB.json');
+        $config = \JsonServer\Config::getInstance();
+        $config->set("urlNamingForm", "singular");
+        $config->set("tableNamingForm", "singular");
+        $config->set("relationsNamingForm", "singular");
+        $this->assertEquals($expected, $server->handleRequest($method, $url, $filter));
     }
 
-    protected function tearDown()
+    /**
+     * @dataProvider requestProviderSingular
+     */
+    public function testRequestSingularPlural ($method, $url, $filter, $expected)
     {
-        $this->fixture = NULL;
+        $server = new \JsonServer\JsonServer(getcwd().'/tests/pluralDB.json');
+        $config = \JsonServer\Config::getInstance();
+        $config->set("urlNamingForm", "singular");
+        $config->set("tableNamingForm", "plural");
+        $config->set("relationsNamingForm", "singular");
+        $this->assertEquals($expected, $server->handleRequest($method, $url, $filter));
+    }
+
+    public function requestProviderSingular()
+    {
+        return [
+            ['GET', ['post'], '', [["id"=>1, "title" => "json-server", "author" => "typicode"],["id"=>2, "title" => "json-server", "author" => "typicode"]]],
+            ['GET', ['post/1'], '', ["id"=>1, "title" => "json-server", "author" => "typicode"]],
+            ['GET', ['post/1/comment/1'], '', ["id"=>1, "body" => "some comment", "post_id" => 1]],
+            ['GET', ['unknown'], '', []],
+            ['GET', ['unknown/1'], '', []],
+        ];
+    }
+
+    /**
+     * @dataProvider requestProviderPlural
+     */
+    public function testRequestPluralSingular ($method, $url, $filter, $expected)
+    {
+        $server = new \JsonServer\JsonServer(getcwd().'/tests/singularDB.json');
+        $config = \JsonServer\Config::getInstance();
+        $config->set("urlNamingForm", "plural");
+        $config->set("tableNamingForm", "singular");
+        $config->set("relationsNamingForm", "singular");
+        $this->assertEquals($expected, $server->handleRequest($method, $url, $filter));
+    }
+
+    /**
+     * @dataProvider requestProviderPlural
+     */
+    public function testRequestPluralPlural ($method, $url, $filter, $expected)
+    {
+        $server = new \JsonServer\JsonServer(getcwd().'/tests/pluralDB.json');
+        $config = \JsonServer\Config::getInstance();
+        $config->set("urlNamingForm", "plural");
+        $config->set("tableNamingForm", "plural");
+        $config->set("relationsNamingForm", "singular");
+        $this->assertEquals($expected, $server->handleRequest($method, $url, $filter));
+    }
+
+    public function requestProviderPlural()
+    {
+        return [
+            ['GET', ['posts'], '', [["id"=>1, "title" => "json-server", "author" => "typicode"],["id"=>2, "title" => "json-server", "author" => "typicode"]]],
+            ['GET', ['posts/1'], '', ["id"=>1, "title" => "json-server", "author" => "typicode"]],
+            ['GET', ['posts/1/comments/1'], '', ["id"=>1, "body" => "some comment", "post_id" => 1]],
+            ['GET', ['unknowns'], '', []],
+            ['GET', ['unknowns/1'], '', []],
+        ];
     }
 
     public function testConstructorPassed()
     {
-        $dbPath = getcwd().'/tests/db.json';
+        $dbPath = getcwd().'/tests/pluralDB.json';
          new \JsonServer\JsonServer($dbPath);
     }
 
@@ -32,36 +89,8 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
      */
     public function testHandleRequestGetEmpty()
     {
-        $this->fixture->handleRequest('GET', [''], '');
+        $dbPath = getcwd().'/tests/pluralDB.json';
+        $server = new \JsonServer\JsonServer($dbPath);
+        $server->handleRequest('GET', [''], '');
     }
-
-    public function testHandleRequestGetSingularAll()
-    {
-        $expect = [["id"=>1, "title" => "json-server", "author" => "typicode"],["id"=>2, "title" => "json-server", "author" => "typicode"]];
-        $result = $this->fixture->handleRequest('GET', ['post'], '');
-        self::assertEquals($expect, $result);
-    }
-
-    public function testHandleRequestGetSingularById()
-    {
-        $expect = ["id"=>1, "title" => "json-server", "author" => "typicode"];
-        $result = $this->fixture->handleRequest('GET', ['post/1'], '');
-        self::assertEquals($expect, $result);
-    }
-
-    public function testHandleRequestGetSingularWithParentAll()
-    {
-        $expect = [["id"=>1, "body" => "some comment", "post_id" => 1]];
-        $result = $this->fixture->handleRequest('GET', ['post/1/comment/'], '');
-        self::assertEquals($expect, $result);
-    }
-
-    public function testHandleRequestGetSingularWithParentById()
-    {
-        $expect = ["id"=>1, "body" => "some comment", "post_id" => 1];
-        $result = $this->fixture->handleRequest('GET', ['post/1/comment/1'], '');
-        self::assertEquals($expect, $result);
-    }
-
-
 }

@@ -9,7 +9,7 @@ class JsonDataBaseTest extends PHPUnit_Framework_TestCase
     {
         require '/vendor/autoload.php';
 
-        $this->fixture = new \JsonServer\JsonDataBase(file_get_contents(getcwd().'/tests/db.json'));
+        $this->fixture = new \JsonServer\JsonDataBase(file_get_contents(getcwd().'/tests/pluralDB.json'));
     }
 
     protected function tearDown()
@@ -19,7 +19,7 @@ class JsonDataBaseTest extends PHPUnit_Framework_TestCase
 
     public function testConstructorPassed()
     {
-        new \JsonServer\JsonDataBase(file_get_contents(getcwd().'/tests/db.json'));
+        new \JsonServer\JsonDataBase(file_get_contents(getcwd().'/tests/pluralDB.json'));
     }
 
     /**
