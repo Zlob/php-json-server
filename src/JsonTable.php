@@ -98,11 +98,16 @@ class JsonTable implements \ArrayAccess
      * @param $parentName
      * @return string
      */
-    private function getParentKeyName($parentName)
+    private function getParentKeyName($noun)
     {
-        //todo учет конфигов + тесты
-        $parentName = Inflector\Inflector::singularize($parentName);
-        return $parentName . "_id";
+        if (!(Config::get('urlNamingForm') === Config::get('relationsNamingForm'))){
+            //todo another method
+            $method = Config::get('relationsNamingForm').'ize';
+            return Inflector\Inflector::$method($noun) . "_id";
+        }
+        else{
+            return $noun . "_id";
+        }
     }
 
     /**

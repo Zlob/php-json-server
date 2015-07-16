@@ -95,7 +95,7 @@ class JsonServer
      */
     private function getObject($parentName = null, $parentId = null)
     {
-        $table = $this->prepareForm(array_shift($this->uri));
+        $table = array_shift($this->uri);
         $id = array_shift($this->uri);
         //get by id
         if ($id) {
@@ -109,6 +109,8 @@ class JsonServer
         } else {
             throw new \InvalidArgumentException('url should contain at least table name');
         }
+
+        //todo jsonApi - если запись не найдена - вернуть 404 или  200 OK response with null as the primary data
         if($result){
             return $result->toArray();
         }
@@ -128,6 +130,7 @@ class JsonServer
      */
     private function getOne($table, $id, $parentName = null, $parentId = null)
     {
+        $table = $this->prepareForm($table);
         $tab = $this->jsonDb->getTable($table)->filterByParent($parentName, $parentId)
             ->find($id);
         return $tab;
@@ -142,6 +145,7 @@ class JsonServer
      */
     private function getMany($table, $parentName = null, $parentId = null)
     {
+        $table = $this->prepareForm($table);
         $tab = $this->jsonDb->getTable($table)->filterByParent($parentName, $parentId);
         return $tab;
     }

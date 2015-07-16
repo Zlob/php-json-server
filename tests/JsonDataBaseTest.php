@@ -7,7 +7,6 @@ class JsonDataBaseTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        require '/vendor/autoload.php';
 
         $this->fixture = new \JsonServer\JsonDataBase(file_get_contents(getcwd().'/tests/pluralDB.json'));
     }

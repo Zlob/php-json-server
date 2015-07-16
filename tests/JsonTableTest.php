@@ -7,7 +7,6 @@ class JsonTableTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        require '/vendor/autoload.php';
 
         $this->fixture = new \JsonServer\JsonTable([['id' => 1, 'parent_id' => 2],['id' => 3, 'parent_id' => 2],['id' => 5, 'parent_id' => 6]]);
     }

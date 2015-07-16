@@ -7,7 +7,6 @@ class JsonRowTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        require '/vendor/autoload.php';
         $this->fixture = new \JsonServer\JsonRow(['field1' => 1, 'field2' => 2]);
     }
 
