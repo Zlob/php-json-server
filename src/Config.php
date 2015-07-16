@@ -23,22 +23,23 @@ class Config implements \ArrayAccess
      */
     private function __construct()
     {
-        self::$items = json_decode(file_get_contents(__DIR__.'/../config/config.json'), true);
+        self::$items = json_decode(file_get_contents(__DIR__ . '/../config/config.json'), true);
     }
 
     /**
      *
      */
-    protected function __clone() {
+    protected function __clone()
+    {
     }
 
     /**
      * return configuration instance
      * @return Config
      */
-    static public function getInstance() {
-        if(is_null(self::$instance))
-        {
+    static public function getInstance()
+    {
+        if (is_null(self::$instance)) {
             self::$instance = new self();
         }
         return self::$instance;
@@ -47,12 +48,12 @@ class Config implements \ArrayAccess
     /**
      * Determine if the given configuration value exists.
      *
-     * @param  string  $key
+     * @param  string $key
      * @return bool
      */
     public static function has($key)
     {
-        if(is_null(self::$instance)){
+        if (is_null(self::$instance)) {
             self::getInstance();
         }
         return array_key_exists($key, self::$items);
@@ -61,12 +62,12 @@ class Config implements \ArrayAccess
     /**
      * Get the specified configuration value.
      *
-     * @param  string  $key
+     * @param  string $key
      * @return mixed
      */
     public static function get($key)
     {
-        if(is_null(self::$instance)){
+        if (is_null(self::$instance)) {
             self::getInstance();
         }
         return self::$items[$key];
@@ -75,13 +76,13 @@ class Config implements \ArrayAccess
     /**
      * Set a given configuration value.
      *
-     * @param  array|string  $key
-     * @param  mixed   $value
+     * @param  array|string $key
+     * @param  mixed $value
      * @return void
      */
     public static function set($key, $value = null)
     {
-        if(is_null(self::$instance)){
+        if (is_null(self::$instance)) {
             self::getInstance();
         }
         self::$items[$key] = $value;

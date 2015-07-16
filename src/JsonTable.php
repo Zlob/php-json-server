@@ -61,8 +61,7 @@ class JsonTable implements \ArrayAccess
         $result = $this->filter(function ($item) use ($id) {
             return $item->id == $id;
         });
-        $va = count($result->rows);
-        if ($va > 0) {
+        if (count($result->rows) > 0) {
             return $result[0];
         } else {
             return null;
@@ -100,12 +99,11 @@ class JsonTable implements \ArrayAccess
      */
     private function getParentKeyName($noun)
     {
-        if (!(Config::get('urlNamingForm') === Config::get('relationsNamingForm'))){
+        if (!(Config::get('urlNamingForm') === Config::get('relationsNamingForm'))) {
             //todo another method
-            $method = Config::get('relationsNamingForm').'ize';
+            $method = Config::get('relationsNamingForm') . 'ize';
             return Inflector\Inflector::$method($noun) . "_id";
-        }
-        else{
+        } else {
             return $noun . "_id";
         }
     }

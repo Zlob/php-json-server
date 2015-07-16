@@ -111,10 +111,9 @@ class JsonServer
         }
 
         //todo jsonApi - если запись не найдена - вернуть 404 или  200 OK response with null as the primary data
-        if($result){
+        if ($result) {
             return $result->toArray();
-        }
-        else{
+        } else {
             return [];
         }
 
@@ -155,13 +154,13 @@ class JsonServer
      * @param $noun
      * @return mixed
      */
-    private function prepareForm($noun){
-        if (!(Config::get('urlNamingForm') === Config::get('tableNamingForm'))){
+    private function prepareForm($noun)
+    {
+        if (!(Config::get('urlNamingForm') === Config::get('tableNamingForm'))) {
             //todo another method
-            $method = Config::get('tableNamingForm').'ize';
+            $method = Config::get('tableNamingForm') . 'ize';
             return Inflector\Inflector::$method($noun);
-        }
-        else{
+        } else {
             return $noun;
         }
     }
