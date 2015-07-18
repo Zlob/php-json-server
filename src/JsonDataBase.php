@@ -22,8 +22,9 @@ class JsonDataBase
      * @internal param $jsonString
      */
     public function __construct($pathToFile)
-    {
+    {   //todo return code
         $this->dbFile = fopen($pathToFile, 'r+b');
+        //todo return code
         flock($this->dbFile, LOCK_EX);
         $jsonString = fread($this->dbFile, filesize($pathToFile));
         if (is_string($jsonString)) {
@@ -59,13 +60,20 @@ class JsonDataBase
         }
     }
 
+    /**
+     * save changes into db file
+     * @return string
+     */
     public function save()
     {
         $result = [];
-        foreach($this->tables as $table){
-            $result[]  = $table->toArray();
+        foreach($this->tables as $tabName=>$table){
+            $result[$tabName]  = $table->toArray();
         }
-        return json_encode($result);
+        //todo return code
+        ftruncate($this->dbFile, 0);
+        rewind($this->dbFile);
+        fwrite($this->dbFile, json_encode($result, JSON_PRETTY_PRINT));
     }
 
 }

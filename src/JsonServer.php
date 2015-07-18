@@ -23,12 +23,6 @@ class JsonServer
     private $data = [];
 
     /**
-     * additional filters
-     * @var
-     */
-    private $filter;
-
-    /**
      * jsonDataBase instance
      * @var JsonDataBase
      */
@@ -58,14 +52,12 @@ class JsonServer
      * @param $method
      * @param $uri
      * @param $data
-     * @param $filter
      * @return mixed
      */
-    public function handleRequest($method, $uri, $data, $filter)
+    public function handleRequest($method, $uri, $data)
     {
         $this->data = $data;
         $this->uri = explode('/', $uri[0]);
-        $this->filter = $filter;
         return $this->$method();
     }
 
@@ -84,33 +76,36 @@ class JsonServer
     }
 
     /**
-     *handle POST request
+     *handle POST request - create new resource
      */
     public function POST()
     {
         $result = $this->getObject();
+        //todo check returned single resource - id must not be specified
+        //todo check resource is not find
         $result->save();
-        if ($result) {
-            return $result->toArray();
-        } else {
-            return [];
-        }
     }
 
     /**
-     * handle PUT request
+     * handle PATCH request - update existing resource
      */
-    public function PUT()
+    public function PATCH()
     {
-//        return $this->getObject();
+        $resource = $this->getObject();
+        //todo check returned single resource - id must be specified
+        //todo check resource is find
+        $resource->patch($this->data);
     }
 
     /**
-     * handle DELETE request
+     * handle DELETE request - delete resource
      */
     public function DELETE()
     {
-//        return $this->getObject();
+        $resource = $this->getObject();
+        //todo check returned single resource - id must be specified
+        //todo check resource is find
+        $resource->delete();
     }
 
 

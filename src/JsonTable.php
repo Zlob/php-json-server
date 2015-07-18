@@ -17,10 +17,11 @@ class JsonTable implements \ArrayAccess
     private $rows = [];
 
     /**
-     * reference to a db object
+     * reference to the db object
      * @var null
      */
     private $db;
+
 
     /**
      * create a new JsonTable instance
@@ -32,7 +33,7 @@ class JsonTable implements \ArrayAccess
         if (is_array($data)) {
             foreach ($data as $row) {
                 if (is_array($row)) {
-                    $this->rows[] = new JsonRow($row, $this->db);
+                    $this->rows[] = new JsonRow($row, $this->db, $this);
                 } elseif (get_class($row) === 'JsonServer\JsonRow') {
                     $this->rows[] = &$row;
                 } else {
@@ -123,6 +124,22 @@ class JsonTable implements \ArrayAccess
         //todo check not null
         $this->db->save();
     }
+
+    /**
+     *save changes into db file
+     */
+    public function delete($rowToDelete)
+    {
+        foreach($this->rows as $key=>$row){
+            if($rowToDelete === $row){
+                unset($this->rows[$key]);
+            }
+        }
+        //todo check not null
+        $this->db->save();
+    }
+
+
 
     /**
      * Return array representation of rows

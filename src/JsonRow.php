@@ -14,6 +14,7 @@ class JsonRow
      */
     private $fields = [];
 
+    //todo delete and action thrue table reference
     /**
      * reference to a db class
      * @var null
@@ -21,13 +22,20 @@ class JsonRow
     private $db;
 
     /**
+     * reference to the db class
+     * @var null
+     */
+    private $table;
+
+    /**
      * create new row instance
      * @param $data
      * @param null $db
      */
-    public function __construct($data, &$db = null)
+    public function __construct($data, &$db = null, &$table = null)
     {
         $this->db = &$db;
+        $this->table = &$table;
         if (is_array($data)) {
             $this->fields = $data;
         } else {
@@ -63,14 +71,27 @@ class JsonRow
         }
     }
 
+    /**
+     *save changes into db file
+     */
+    public function patch($data)
+    {
+        foreach($data as $field=>$value){
+            if($this->$field === 'id'){
+                continue;
+            }
+            $this->$field = $value;
+        }
+        //todo check not null
+        $this->db->save();
+    }
 
     /**
      *save changes into db file
      */
-    public function save()
+    public function delete()
     {
-        //todo check not null
-        $this->db->save();
+        $this->table->delete($this);
     }
 
     /**
