@@ -74,17 +74,17 @@ class JsonRow
     /**
      *save changes into db file
      */
-    public function patch($data)
-    {
-        foreach($data as $field=>$value){
-            if($this->$field === 'id'){
-                continue;
-            }
-            $this->$field = $value;
-        }
-        //todo check not null
-        $this->db->save();
-    }
+//    public function patch($data)
+//    {
+//        foreach($data as $field=>$value){
+//            if($this->$field === 'id'){
+//                continue;
+//            }
+//            $this->$field = $value;
+//        }
+//        //todo check not null
+//        $this->db->save();
+//    }
 
     /**
      *save changes into db file

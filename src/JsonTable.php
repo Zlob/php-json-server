@@ -89,6 +89,19 @@ class JsonTable implements \ArrayAccess
         return $this;
     }
 
+    public function patch($id, $data)
+    {
+        $row = $this->find($id);
+        foreach($data as $field=>$value){
+            if($row->$field === 'id'){
+                continue;
+            }
+            $row->$field = $value;
+        }
+        //todo check not null
+        $this->db->save();
+    }
+
     /**
      * Filter rows with callback function
      * @param $callback

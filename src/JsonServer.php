@@ -69,16 +69,13 @@ class JsonServer
     {
         $filter = $this->getFilters($this->uri);
         $last = array_pop($filter);
-        $table = $this->prepareForm($last['table']);
+        $tabName = $this->prepareForm($last['table']);
         $id = $last['id'];
-        if($id){
-            $result = $this->jsonDb->$table->find($id);
+        if ($id) {
+            $result = $this->jsonDb->$tabName->find($id);
+        } else {
+            $result = $this->jsonDb->$tabName;
         }
-        else{
-            $result = $this->jsonDb->$table;
-        }
-
-//        $result = $this->getObject();
         if ($result) {
             return $result->toArray();
         } else {
@@ -102,10 +99,26 @@ class JsonServer
      */
     public function PATCH()
     {
-        $resource = $this->getObject();
-        //todo check returned single resource - id must be specified
-        //todo check resource is find
-        $resource->patch($this->data);
+        $filter = $this->getFilters($this->uri);
+        $last = array_pop($filter);
+        $tabName = $this->prepareForm($last['table']);
+        $id = $last['id'];
+        if ($id) {
+            $table = $this->jsonDb->$tabName;
+            $table->patch($id, $this->data);
+        } else {
+            //todo check returned single resource - id must be specified
+        }
+//        if ($row) {
+//            return $row->toArray();
+//        } else {
+            //todo check resource is find
+//            return [];
+//        }
+
+//        $resource = $this->getObject();
+
+//        $resource->patch($this->data);
     }
 
     /**
@@ -197,12 +210,12 @@ class JsonServer
     private function getFilters($uri)
     {
         $result = [];
-        for($i = 0; $i < count($uri); $i+=2){
+        for ($i = 0; $i < count($uri); $i += 2) {
             $tab = array_key_exists($i, $uri) ? $uri[$i] : null;
-            if($tab){
+            if ($tab) {
                 $elem = [];
                 $elem['table'] = $tab;
-                $elem['id'] = array_key_exists($i+1, $uri) ? $uri[$i+1] : null;
+                $elem['id'] = array_key_exists($i + 1, $uri) ? $uri[$i + 1] : null;
                 $result[] = $elem;
             }
         }
