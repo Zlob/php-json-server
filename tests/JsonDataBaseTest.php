@@ -7,29 +7,14 @@ class JsonDataBaseTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-
-        $this->fixture = new \JsonServer\JsonDataBase(file_get_contents(getcwd().'/tests/pluralDB.json'));
+        $this->fixture = new \JsonServer\JsonDataBase(getcwd().'/tests/pluralDB.json');
     }
 
     protected function tearDown()
     {
-        $this->fixture = NULL;
-    }
 
-    public function testConstructorPassed()
-    {
-        new \JsonServer\JsonDataBase(file_get_contents(getcwd().'/tests/pluralDB.json'));
+        $this->fixture->__destruct();
     }
-
-    /**
-     * @expectedException        InvalidArgumentException
-     * @expectedExceptionMessage data should be JSON string
-     */
-    public function testConstructorFail()
-    {
-        new \JsonServer\JsonDataBase(['id' => 1, 'parent_id' => 2]);
-    }
-
 
     public function testGetTable()
     {

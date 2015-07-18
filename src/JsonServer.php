@@ -17,6 +17,12 @@ class JsonServer
     private $uri = [];
 
     /**
+     * array of request data
+     * @var array
+     */
+    private $data = [];
+
+    /**
      * additional filters
      * @var
      */
@@ -35,19 +41,29 @@ class JsonServer
      */
     public function __construct($dbPath)
     {
-//        $this->config = Config::getInstance();
-        $this->jsonDb = new JsonDataBase(file_get_contents($dbPath));
+        $this->jsonDb = new JsonDataBase($dbPath);
+    }
+
+    /**
+     * create new JsonServer instance
+     * @param $dbPath
+     */
+    public function __destruct()
+    {
+        $this->jsonDb->__destruct();
     }
 
     /**
      * Handle retrieved request
      * @param $method
      * @param $uri
+     * @param $data
      * @param $filter
      * @return mixed
      */
-    public function handleRequest($method, $uri, $filter)
+    public function handleRequest($method, $uri, $data, $filter)
     {
+        $this->data = $data;
         $this->uri = explode('/', $uri[0]);
         $this->filter = $filter;
         return $this->$method();
@@ -59,7 +75,12 @@ class JsonServer
      */
     public function GET()
     {
-        return $this->getObject();
+        $result = $this->getObject();
+        if ($result) {
+            return $result->toArray();
+        } else {
+            return [];
+        }
     }
 
     /**
@@ -67,7 +88,13 @@ class JsonServer
      */
     public function POST()
     {
-//        return $this->getObject();
+        $result = $this->getObject();
+        $result->save();
+        if ($result) {
+            return $result->toArray();
+        } else {
+            return [];
+        }
     }
 
     /**
@@ -111,11 +138,7 @@ class JsonServer
         }
 
         //todo jsonApi - если запись не найдена - вернуть 404 или  200 OK response with null as the primary data
-        if ($result) {
-            return $result->toArray();
-        } else {
-            return [];
-        }
+        return $result;
 
     }
 

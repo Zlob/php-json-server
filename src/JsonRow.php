@@ -15,11 +15,19 @@ class JsonRow
     private $fields = [];
 
     /**
+     * reference to a db class
+     * @var null
+     */
+    private $db;
+
+    /**
      * create new row instance
      * @param $data
+     * @param null $db
      */
-    public function __construct($data)
+    public function __construct($data, &$db = null)
     {
+        $this->db = &$db;
         if (is_array($data)) {
             $this->fields = $data;
         } else {
@@ -39,6 +47,30 @@ class JsonRow
         } else {
             throw new \OutOfRangeException("there is no key $key in row");
         }
+    }
+
+    /**
+     * set row field value
+     * @param $key
+     * @return mixed
+     */
+    public function __set($key, $value)
+    {
+        if (array_key_exists($key, $this->fields)) {
+            $this->fields[$key] = $value;
+        } else {
+            throw new \OutOfRangeException("there is no key $key in row");
+        }
+    }
+
+
+    /**
+     *save changes into db file
+     */
+    public function save()
+    {
+        //todo check not null
+        $this->db->save();
     }
 
     /**

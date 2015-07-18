@@ -8,6 +8,8 @@ namespace JsonServer;
  */
 class JsonDataBase
 {
+
+    private $dbFile;
     /**
      * array of tables in DB
      * @var array
@@ -16,15 +18,19 @@ class JsonDataBase
 
     /**
      * create instance of JsonDataBase
-     * @param $jsonString
+     * @param $pathToFile
+     * @internal param $jsonString
      */
-    public function __construct($jsonString)
+    public function __construct($pathToFile)
     {
+        $this->dbFile = fopen($pathToFile, 'r+b');
+        flock($this->dbFile, LOCK_EX);
+        $jsonString = fread($this->dbFile, filesize($pathToFile));
         if (is_string($jsonString)) {
             $tables = json_decode($jsonString, true);
             if (is_array($tables)) {
                 foreach (json_decode($jsonString, true) as $tableName => $tableData) {
-                    $this->tables[$tableName] = new JsonTable($tableData);
+                    $this->tables[$tableName] = new JsonTable($tableData, $this);
                 }
             } else {
                 throw new \InvalidArgumentException('data should be JSON string');
@@ -32,6 +38,10 @@ class JsonDataBase
         } else {
             throw new \InvalidArgumentException('data should be JSON string');
         }
+    }
+
+    function __destruct() {
+        flock($this->dbFile, LOCK_UN);
     }
 
     /**
@@ -47,6 +57,15 @@ class JsonDataBase
             $this->tables[$tableName] = new JsonTable([]);
             return $this->tables[$tableName];
         }
+    }
+
+    public function save()
+    {
+        $result = [];
+        foreach($this->tables as $table){
+            $result[]  = $table->toArray();
+        }
+        return json_encode($result);
     }
 
 }
