@@ -76,4 +76,23 @@ class JsonDataBase
         fwrite($this->dbFile, json_encode($result, JSON_PRETTY_PRINT));
     }
 
+    /**
+     * @param mixed $offset
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return array_key_exists($this->tables, $offset);
+    }
+
+    public function __get($key)
+    {
+        if (array_key_exists($key, $this->tables)) {
+            return $this->tables[$key];
+        }
+        else{
+            $this->tables[$key] = new JsonTable([], $this);
+            return $this->tables[$key];
+        }
+    }
 }

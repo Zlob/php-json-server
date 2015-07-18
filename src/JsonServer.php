@@ -67,7 +67,18 @@ class JsonServer
      */
     public function GET()
     {
-        $result = $this->getObject();
+        $filter = $this->getFilters($this->uri);
+        $last = array_pop($filter);
+        $table = $this->prepareForm($last['table']);
+        $id = $last['id'];
+        if($id){
+            $result = $this->jsonDb->$table->find($id);
+        }
+        else{
+            $result = $this->jsonDb->$table;
+        }
+
+//        $result = $this->getObject();
         if ($result) {
             return $result->toArray();
         } else {
@@ -181,5 +192,20 @@ class JsonServer
         } else {
             return $noun;
         }
+    }
+
+    private function getFilters($uri)
+    {
+        $result = [];
+        for($i = 0; $i < count($uri); $i+=2){
+            $tab = array_key_exists($i, $uri) ? $uri[$i] : null;
+            if($tab){
+                $elem = [];
+                $elem['table'] = $tab;
+                $elem['id'] = array_key_exists($i+1, $uri) ? $uri[$i+1] : null;
+                $result[] = $elem;
+            }
+        }
+        return $result;
     }
 }
