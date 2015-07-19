@@ -41,7 +41,8 @@ class JsonDataBase
         }
     }
 
-    function __destruct() {
+    function __destruct()
+    {
         flock($this->dbFile, LOCK_UN);
     }
 
@@ -67,8 +68,8 @@ class JsonDataBase
     public function save()
     {
         $result = [];
-        foreach($this->tables as $tabName=>$table){
-            $result[$tabName]  = $table->toArray();
+        foreach ($this->tables as $tabName => $table) {
+            $result[$tabName] = $table->toArray();
         }
         //todo return code
         ftruncate($this->dbFile, 0);
@@ -89,8 +90,7 @@ class JsonDataBase
     {
         if (array_key_exists($key, $this->tables)) {
             return $this->tables[$key];
-        }
-        else{
+        } else {
             $this->tables[$key] = new JsonTable([], $this);
             return $this->tables[$key];
         }

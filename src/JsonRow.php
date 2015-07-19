@@ -14,7 +14,7 @@ class JsonRow
      */
     private $fields = [];
 
-    //todo delete and action thrue table reference
+    //todo delete and action true table reference
     /**
      * reference to a db class
      * @var null
@@ -40,6 +40,9 @@ class JsonRow
             $this->fields = $data;
         } else {
             throw new \InvalidArgumentException("$data should be array");
+        }
+        if (!array_key_exists('id', $this->fields) || !is_numeric($this->fields['id'])) {
+            $this->fields['id'] = $this->table->getNewId();
         }
     }
 
@@ -71,28 +74,17 @@ class JsonRow
         }
     }
 
-    /**
-     *save changes into db file
-     */
-//    public function patch($data)
-//    {
-//        foreach($data as $field=>$value){
-//            if($this->$field === 'id'){
-//                continue;
-//            }
-//            $this->$field = $value;
-//        }
-//        //todo check not null
-//        $this->db->save();
-//    }
 
-    /**
-     *save changes into db file
-     */
-    public function delete()
+    public function setData($data)
     {
-        $this->table->delete($this);
+        foreach ($data as $field => $value) {
+            if ($field === 'id') {
+                continue;
+            }
+            $this->$field = $value;
+        }
     }
+
 
     /**
      * Return array representation of row

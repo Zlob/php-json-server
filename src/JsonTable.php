@@ -59,7 +59,7 @@ class JsonTable implements \ArrayAccess
     }
 
     /**
-     * Return row whth id $id
+     * Return row with id $id
      * @param $id
      * @return null
      */
@@ -81,25 +81,46 @@ class JsonTable implements \ArrayAccess
      * @param $parentId
      * @return $this|JsonTable
      */
-    public function filterByParent($parentName, $parentId)
+    public function filterByParent($parent)
     {
-        if ($parentName != null) {
-            return $this->where($this->getParentKeyName($parentName), $parentId);
+        if ($parent) {
+            return $this->where($this->getParentKeyName($parent['table']), $parent['id']);
         }
         return $this;
+    }
+
+    public function post($data)
+    {
+        $this->rows[] = new JsonRow($data, $this->db, $this);
+        $this->db->save();
     }
 
     public function patch($id, $data)
     {
         $row = $this->find($id);
-        foreach($data as $field=>$value){
-            if($row->$field === 'id'){
-                continue;
+        $row->setData($data);
+        //todo check row find
+        //todo check db not null
+        $this->db->save();
+    }
+
+    /**
+     *delete resource from db
+     */
+    public function delete($id)
+    {
+        foreach ($this->rows as $key => $row) {
+            if ($row->id == $id) {
+                unset($this->rows[$key]);
+                //todo return sucess
+                $this->db->save();
+                return 0;
             }
-            $row->$field = $value;
         }
+        //todo return not found
         //todo check not null
         $this->db->save();
+        return 1;
     }
 
     /**
@@ -128,7 +149,6 @@ class JsonTable implements \ArrayAccess
         }
     }
 
-
     /**
      *save changes into db file
      */
@@ -138,21 +158,17 @@ class JsonTable implements \ArrayAccess
         $this->db->save();
     }
 
-    /**
-     *save changes into db file
-     */
-    public function delete($rowToDelete)
+
+    public function getNewId()
     {
-        foreach($this->rows as $key=>$row){
-            if($rowToDelete === $row){
-                unset($this->rows[$key]);
-            }
+        $ids = [];
+        foreach ($this->rows as $row) {
+            $ids[] = $row->id;
         }
-        //todo check not null
-        $this->db->save();
+        sort($ids);
+        $max = end($ids);
+        return ++$max;
     }
-
-
 
     /**
      * Return array representation of rows

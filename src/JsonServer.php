@@ -69,12 +69,13 @@ class JsonServer
     {
         $filter = $this->getFilters($this->uri);
         $last = array_pop($filter);
+        $parent = count($filter) > 0 ? array_pop($filter) : null;
         $tabName = $this->prepareForm($last['table']);
         $id = $last['id'];
         if ($id) {
             $result = $this->jsonDb->$tabName->find($id);
         } else {
-            $result = $this->jsonDb->$tabName;
+            $result = $this->jsonDb->$tabName->filterByParent($parent);
         }
         if ($result) {
             return $result->toArray();
@@ -88,10 +89,16 @@ class JsonServer
      */
     public function POST()
     {
-        $result = $this->getObject();
-        //todo check returned single resource - id must not be specified
-        //todo check resource is not find
-        $result->save();
+        $filter = $this->getFilters($this->uri);
+        $last = array_pop($filter);
+        $tabName = $this->prepareForm($last['table']);
+        $id = $last['id'];
+        if (!$id) {
+            $table = $this->jsonDb->$tabName;
+            $table->post($this->data);
+        } else {
+            //todo check returned single resource - id must not be specified
+        }
     }
 
     /**
@@ -107,18 +114,8 @@ class JsonServer
             $table = $this->jsonDb->$tabName;
             $table->patch($id, $this->data);
         } else {
-            //todo check returned single resource - id must be specified
+            //todo check - id must be specified
         }
-//        if ($row) {
-//            return $row->toArray();
-//        } else {
-            //todo check resource is find
-//            return [];
-//        }
-
-//        $resource = $this->getObject();
-
-//        $resource->patch($this->data);
     }
 
     /**
@@ -126,69 +123,16 @@ class JsonServer
      */
     public function DELETE()
     {
-        $resource = $this->getObject();
-        //todo check returned single resource - id must be specified
-        //todo check resource is find
-        $resource->delete();
-    }
-
-
-    /**
-     * get rows from DB
-     * @param null $parentName
-     * @param null $parentId
-     * @return mixed
-     */
-    private function getObject($parentName = null, $parentId = null)
-    {
-        $table = array_shift($this->uri);
-        $id = array_shift($this->uri);
-        //get by id
+        $filter = $this->getFilters($this->uri);
+        $last = array_pop($filter);
+        $tabName = $this->prepareForm($last['table']);
+        $id = $last['id'];
         if ($id) {
-            $result = $this->getOne($table, $id, $parentName, $parentId);
-            if ($result && count($this->uri) >= 1) {
-                return $this->getObject($table, $id);
-            }
-        } //get all by table
-        elseif ($table) {
-            $result = $this->getMany($table, $parentName, $parentId);
+            $table = $this->jsonDb->$tabName;
+            $table->delete($id, $this->data);
         } else {
-            throw new \InvalidArgumentException('url should contain at least table name');
+            //todo check - id must be specified
         }
-
-        //todo jsonApi - если запись не найдена - вернуть 404 или  200 OK response with null as the primary data
-        return $result;
-
-    }
-
-    /**
-     * return single row from table by params
-     * @param $table
-     * @param $id
-     * @param null $parentName
-     * @param null $parentId
-     * @return mixed
-     */
-    private function getOne($table, $id, $parentName = null, $parentId = null)
-    {
-        $table = $this->prepareForm($table);
-        $tab = $this->jsonDb->getTable($table)->filterByParent($parentName, $parentId)
-            ->find($id);
-        return $tab;
-    }
-
-    /**
-     * return all rows from table by params
-     * @param $table
-     * @param null $parentName
-     * @param null $parentId
-     * @return mixed
-     */
-    private function getMany($table, $parentName = null, $parentId = null)
-    {
-        $table = $this->prepareForm($table);
-        $tab = $this->jsonDb->getTable($table)->filterByParent($parentName, $parentId);
-        return $tab;
     }
 
     /**
@@ -198,6 +142,7 @@ class JsonServer
      */
     private function prepareForm($noun)
     {
+        //todo single global method
         if (!(Config::get('urlNamingForm') === Config::get('tableNamingForm'))) {
             //todo another method
             $method = Config::get('tableNamingForm') . 'ize';
