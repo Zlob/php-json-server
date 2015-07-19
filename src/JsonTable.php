@@ -10,30 +10,41 @@ use Doctrine\Common\Inflector;
  */
 class JsonTable implements \ArrayAccess
 {
+
     /**
+     * Table rows
+     *
      * @var array
-     * Array of table rows
      */
     private $rows = [];
 
     /**
-     * reference to the db object
+     * Reference to the db object
+     *
      * @var null
      */
     private $db;
 
+    /**
+     * Name of associated table
+     *
+     * @var
+     */
+    private $tabName;
 
     /**
-     * create a new JsonTable instance
+     * Create a new JsonTable instance
+     *
      * @param $data
      */
-    public function __construct($data, &$db = null)
+    public function __construct($data, $tabName, &$db = null)
     {
         $this->db = &$db;
+        $this->tabName = $tabName;
         if (is_array($data)) {
             foreach ($data as $row) {
                 if (is_array($row)) {
-                    $this->rows[] = new JsonRow($row, $this->db, $this);
+                    $this->rows[] = new JsonRow($row, $this);
                 } elseif (get_class($row) === 'JsonServer\JsonRow') {
                     $this->rows[] = &$row;
                 } else {
@@ -47,6 +58,7 @@ class JsonTable implements \ArrayAccess
 
     /**
      * Filter table rows by $key with $value
+     *
      * @param $key
      * @param $value
      * @return JsonTable
@@ -60,6 +72,7 @@ class JsonTable implements \ArrayAccess
 
     /**
      * Return row with id $id
+     *
      * @param $id
      * @return null
      */
@@ -77,8 +90,8 @@ class JsonTable implements \ArrayAccess
 
     /**
      * Filter rows by related entity id
-     * @param $parentName
-     * @param $parentId
+     *
+     * @param $parent - array with 'table' and 'id' keys
      * @return $this|JsonTable
      */
     public function filterByParent($parent)
@@ -89,76 +102,58 @@ class JsonTable implements \ArrayAccess
         return $this;
     }
 
-    public function post($data)
+    /**
+     * Add new resource
+     *
+     * @param $data
+     * @return int
+     */
+    public function insert($data)
     {
-        $this->rows[] = new JsonRow($data, $this->db, $this);
-        $this->db->save();
-    }
-
-    public function patch($id, $data)
-    {
-        $row = $this->find($id);
-        $row->setData($data);
-        //todo check row find
-        //todo check db not null
-        $this->db->save();
+        $row = new JsonRow($data, $this);
+        $this->rows[] = $row;
+        return $row;
     }
 
     /**
-     *delete resource from db
+     * Update resource
+     *
+     * @param $id
+     * @param $data
+     * @return int
+     */
+    public function update($id, $data)
+    {
+        $row = $this->find($id);
+        if(!$row){
+            throw new \OutOfRangeException("there is no resource with id $id");
+        }
+        $row->setData($data);
+        return $row;
+    }
+
+    /**
+     * Delete resource
+     *
+     * @param $id
+     * @return int
      */
     public function delete($id)
     {
         foreach ($this->rows as $key => $row) {
             if ($row->id == $id) {
                 unset($this->rows[$key]);
-                //todo return sucess
-                $this->db->save();
                 return 0;
             }
         }
-        //todo return not found
-        //todo check not null
-        $this->db->save();
-        return 1;
+        throw new \OutOfRangeException("there is no resource with id $id");
     }
 
     /**
-     * Filter rows with callback function
-     * @param $callback
-     * @return static
+     * Return free id number
+     *
+     * @return mixed
      */
-    private function filter($callback)
-    {
-        return new static(array_filter($this->rows, $callback));
-    }
-
-    /**
-     * return parant relation field in right form
-     * @param $parentName
-     * @return string
-     */
-    private function getParentKeyName($noun)
-    {
-        if (!(Config::get('urlNamingForm') === Config::get('relationsNamingForm'))) {
-            //todo another method
-            $method = Config::get('relationsNamingForm') . 'ize';
-            return Inflector\Inflector::$method($noun) . "_id";
-        } else {
-            return $noun . "_id";
-        }
-    }
-
-    /**
-     *save changes into db file
-     */
-    public function save()
-    {
-        //todo check not null
-        $this->db->save();
-    }
-
-
     public function getNewId()
     {
         $ids = [];
@@ -172,6 +167,7 @@ class JsonTable implements \ArrayAccess
 
     /**
      * Return array representation of rows
+     *
      * @return array
      */
     public function toArray()
@@ -181,6 +177,15 @@ class JsonTable implements \ArrayAccess
             $result[] = $row->toArray();
         }
         return $result;
+    }
+
+    /**
+     * Return count of rows in table
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->rows);
     }
 
     /**
@@ -217,4 +222,33 @@ class JsonTable implements \ArrayAccess
     {
         unset($this->rows[$offset]);
     }
+
+    /**
+     * Filter rows with callback function
+     *
+     * @param $callback
+     * @return static
+     */
+    private function filter($callback)
+    {
+        return new static(array_filter($this->rows, $callback), $this->tabName);
+    }
+
+    /**
+     * Return parent relation field in right form
+     *
+     * @param $noun
+     * @return string
+     */
+    private function getParentKeyName($noun)
+    {
+        if (!(Config::get('urlNamingForm') === Config::get('relationsNamingForm'))) {
+            //todo another method
+            $method = Config::get('relationsNamingForm') . 'ize';
+            return Inflector\Inflector::$method($noun) . "_id";
+        } else {
+            return $noun . "_id";
+        }
+    }
+
 }

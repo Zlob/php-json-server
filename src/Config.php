@@ -7,13 +7,14 @@ class Config implements \ArrayAccess
 {
     /**
      * All of the configuration items.
+     *
      * @var array
      */
     protected static $items = [];
 
-
     /**
-     * singleton instance
+     * Singleton instance
+     *
      * @var null
      */
     private static $instance = null;
@@ -26,15 +27,12 @@ class Config implements \ArrayAccess
         self::$items = json_decode(file_get_contents(__DIR__ . '/../config/config.json'), true);
     }
 
-    /**
-     *
-     */
     protected function __clone()
     {
     }
 
     /**
-     * return configuration instance
+     * Return configuration instance
      * @return Config
      */
     static public function getInstance()
@@ -108,4 +106,5 @@ class Config implements \ArrayAccess
     {
         unset(self::$items[$offset]);
     }
+
 }

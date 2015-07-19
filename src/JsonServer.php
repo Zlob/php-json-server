@@ -2,6 +2,7 @@
 
 namespace JsonServer;
 
+use BadFunctionCallException;
 use Doctrine\Common\Inflector;
 
 /**
@@ -11,26 +12,37 @@ use Doctrine\Common\Inflector;
 class JsonServer
 {
     /**
-     * array of entities and ids,  that need to retrieve
+     * Array of entities and ids, that need to retrieve
+     *
      * @var array
      */
-    private $uri = [];
+    private $params = [];
 
     /**
-     * array of request data
+     * Path to resource
+     *
+     * @var string
+     */
+    private $path = "";
+
+    /**
+     * Request data
+     *
      * @var array
      */
     private $data = [];
 
     /**
      * jsonDataBase instance
+     *
      * @var JsonDataBase
      */
     private $jsonDb;
 
 
     /**
-     * create new JsonServer instance
+     * Create new JsonServer instance
+     *
      * @param $dbPath
      */
     public function __construct($dbPath)
@@ -39,8 +51,7 @@ class JsonServer
     }
 
     /**
-     * create new JsonServer instance
-     * @param $dbPath
+     * Remove jsonDb and unlock db file
      */
     public function __destruct()
     {
@@ -49,6 +60,7 @@ class JsonServer
 
     /**
      * Handle retrieved request
+     *
      * @param $method
      * @param $uri
      * @param $data
@@ -57,17 +69,19 @@ class JsonServer
     public function handleRequest($method, $uri, $data)
     {
         $this->data = $data;
-        $this->uri = explode('/', $uri[0]);
+        $this->path = $uri[0];  //todo maybe throw exception if $uri[0] === "" ??!
+        $this->params = explode('/', $uri[0]);
         return $this->$method();
     }
 
     /**
-     * handle GET request
+     * Handle GET request
+     *
      * @return mixed
      */
     public function GET()
     {
-        $filter = $this->getFilters($this->uri);
+        $filter = $this->getFilters($this->params);
         $last = array_pop($filter);
         $parent = count($filter) > 0 ? array_pop($filter) : null;
         $tabName = $this->prepareForm($last['table']);
@@ -85,58 +99,64 @@ class JsonServer
     }
 
     /**
-     *handle POST request - create new resource
+     * Handle POST request - create new resource
      */
     public function POST()
     {
-        $filter = $this->getFilters($this->uri);
+        $filter = $this->getFilters($this->params);
         $last = array_pop($filter);
         $tabName = $this->prepareForm($last['table']);
         $id = $last['id'];
         if (!$id) {
             $table = $this->jsonDb->$tabName;
-            $table->post($this->data);
+            $row = $table->insert($this->data);
+            $this->jsonDb->save();
+            return $row->toArray();
         } else {
-            //todo check returned single resource - id must not be specified
+            throw new BadFunctionCallException("path $this->path must not contaign id");
         }
     }
 
     /**
-     * handle PATCH request - update existing resource
+     * Handle PATCH request - update existing resource
      */
     public function PATCH()
     {
-        $filter = $this->getFilters($this->uri);
+        $filter = $this->getFilters($this->params);
         $last = array_pop($filter);
         $tabName = $this->prepareForm($last['table']);
         $id = $last['id'];
         if ($id) {
             $table = $this->jsonDb->$tabName;
-            $table->patch($id, $this->data);
+            $row = $table->update($id, $this->data);
+            $this->db->save();
+            return $row->toArray();
         } else {
-            //todo check - id must be specified
+            throw new BadFunctionCallException("path $this->path must contaign id");
         }
     }
 
     /**
-     * handle DELETE request - delete resource
+     * Handle DELETE request - delete resource
      */
     public function DELETE()
     {
-        $filter = $this->getFilters($this->uri);
+        $filter = $this->getFilters($this->params);
         $last = array_pop($filter);
         $tabName = $this->prepareForm($last['table']);
         $id = $last['id'];
         if ($id) {
             $table = $this->jsonDb->$tabName;
             $table->delete($id, $this->data);
+            $this->db->save();
         } else {
-            //todo check - id must be specified
+            throw new BadFunctionCallException("path $this->path must contaign id");
         }
     }
 
     /**
-     * get right form of table based on config
+     * Get right form of table based on config
+     *
      * @param $noun
      * @return mixed
      */
@@ -152,6 +172,12 @@ class JsonServer
         }
     }
 
+    /**
+     * Create array of pairs table->id
+     *
+     * @param $uri
+     * @return array
+     */
     private function getFilters($uri)
     {
         $result = [];

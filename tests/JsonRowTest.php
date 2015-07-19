@@ -17,7 +17,21 @@ class JsonRowTest extends PHPUnit_Framework_TestCase
 
     public function testGetPassed()
     {
-        static::assertEquals($this->fixture->field1, 1);
+        static::assertEquals($this->fixture->field1, 1, 'get field from row is working');
+    }
+
+    public function testSetPassed()
+    {
+        $this->fixture->field1 = "new value";
+        static::assertEquals($this->fixture->field1, 'new value', 'get field from row is working');
+    }
+
+    public function testSetFields()
+    {
+        $data = ['id'=>77, 'field1' => 11, 'field2' => 22];
+        $this->fixture->setData($data);
+        $dataExpext = ['id'=>0, 'field1' => 11, 'field2' => 22];
+        static::assertEquals($this->fixture->toArray(), $dataExpext, 'mass assignment trough setData is working');
     }
 
     /**
@@ -31,13 +45,9 @@ class JsonRowTest extends PHPUnit_Framework_TestCase
 
     public function testToArray()
     {
-        static::assertArrayHasKey('field1', $this->fixture->toArray());
+        static::assertArrayHasKey('field1', $this->fixture->toArray(), 'toArray is working');
     }
 
-    public function testConstructor()
-    {
-        new \JsonServer\JsonRow(['id'=>0, 'field1' => 1, 'field2' => 2]);
-    }
 
     /**
      * @expectedException        InvalidArgumentException

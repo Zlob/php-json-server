@@ -9,32 +9,28 @@ namespace JsonServer;
 class JsonRow
 {
     /**
-     * array of the row fields
+     * The row fields
+     *
      * @var array
      */
     private $fields = [];
 
-    //todo delete and action true table reference
-    /**
-     * reference to a db class
-     * @var null
-     */
-    private $db;
 
     /**
-     * reference to the db class
+     * Reference to the db class
+     *
      * @var null
      */
     private $table;
 
     /**
-     * create new row instance
-     * @param $data
-     * @param null $db
+     * Create new row instance
+     *
+     * @param $data - $row fields data
+     * @param $table - instance of table, row belong to
      */
-    public function __construct($data, &$db = null, &$table = null)
+    public function __construct($data, &$table = null)
     {
-        $this->db = &$db;
         $this->table = &$table;
         if (is_array($data)) {
             $this->fields = $data;
@@ -47,7 +43,8 @@ class JsonRow
     }
 
     /**
-     * return row field value
+     * Return row field value
+     *
      * @param $key
      * @return mixed
      */
@@ -61,7 +58,8 @@ class JsonRow
     }
 
     /**
-     * set row field value
+     * Set row field value
+     *
      * @param $key
      * @return mixed
      */
@@ -75,6 +73,11 @@ class JsonRow
     }
 
 
+    /**
+     * Fields mass assignment
+     *
+     * @param $data
+     */
     public function setData($data)
     {
         foreach ($data as $field => $value) {
@@ -85,9 +88,9 @@ class JsonRow
         }
     }
 
-
     /**
      * Return array representation of row
+     *
      * @return array
      */
     public function toArray()

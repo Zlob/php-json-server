@@ -18,9 +18,7 @@ class JsonDataBaseTest extends PHPUnit_Framework_TestCase
 
     public function testGetTable()
     {
-        self::assertInstanceOf('JsonServer\JsonTable', $this->fixture->getTable('post'));
+        self::assertInstanceOf('JsonServer\JsonTable', $this->fixture->post);
     }
-
-
 
 }

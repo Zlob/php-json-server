@@ -9,29 +9,39 @@ namespace JsonServer;
 class JsonDataBase
 {
 
-    private $dbFile;
     /**
-     * array of tables in DB
+     *
+     *
+     * @var resource
+     */
+    private $dbFile;
+
+    /**
+     * Array of tables in DB
+     *
      * @var array
      */
     private $tables = [];
 
     /**
-     * create instance of JsonDataBase
+     * Create instance of JsonDataBase
+     *
      * @param $pathToFile
      * @internal param $jsonString
      */
     public function __construct($pathToFile)
-    {   //todo return code
+    {
         $this->dbFile = fopen($pathToFile, 'r+b');
-        //todo return code
+        if(!$this->dbFile){
+            throw new \RuntimeException("cannot open file $pathToFile");
+        }
         flock($this->dbFile, LOCK_EX);
         $jsonString = fread($this->dbFile, filesize($pathToFile));
         if (is_string($jsonString)) {
             $tables = json_decode($jsonString, true);
             if (is_array($tables)) {
                 foreach (json_decode($jsonString, true) as $tableName => $tableData) {
-                    $this->tables[$tableName] = new JsonTable($tableData, $this);
+                    $this->tables[$tableName] = new JsonTable($tableData, $tableName, $this);
                 }
             } else {
                 throw new \InvalidArgumentException('data should be JSON string');
@@ -41,28 +51,17 @@ class JsonDataBase
         }
     }
 
-    function __destruct()
+    /**
+     * Unlock file
+     */
+    public function __destruct()
     {
         flock($this->dbFile, LOCK_UN);
     }
 
     /**
-     * return table
-     * @param $tableName
-     * @return mixed
-     */
-    public function getTable($tableName)
-    {
-        if (array_key_exists($tableName, $this->tables)) {
-            return $this->tables[$tableName];
-        } else {
-            $this->tables[$tableName] = new JsonTable([]);
-            return $this->tables[$tableName];
-        }
-    }
-
-    /**
-     * save changes into db file
+     * Save changes into db file
+     *
      * @return string
      */
     public function save()
@@ -71,28 +70,24 @@ class JsonDataBase
         foreach ($this->tables as $tabName => $table) {
             $result[$tabName] = $table->toArray();
         }
-        //todo return code
         ftruncate($this->dbFile, 0);
         rewind($this->dbFile);
         fwrite($this->dbFile, json_encode($result, JSON_PRETTY_PRINT));
     }
 
     /**
-     * @param mixed $offset
-     * @return bool
+     * Return table instance by name
+     *
+     * @param $name
+     * @return mixed
      */
-    public function offsetExists($offset)
+    public function __get($name)
     {
-        return array_key_exists($this->tables, $offset);
-    }
-
-    public function __get($key)
-    {
-        if (array_key_exists($key, $this->tables)) {
-            return $this->tables[$key];
+        if (array_key_exists($name, $this->tables)) {
+            return $this->tables[$name];
         } else {
-            $this->tables[$key] = new JsonTable([], $this);
-            return $this->tables[$key];
+            $this->tables[$name] = new JsonTable([], $name, $this);
+            return $this->tables[$name];
         }
     }
 }
