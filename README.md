@@ -14,8 +14,4 @@ Inspired by [JSON Server](https://github.com/typicode/json-server)
 
 ##Documentation
 
-##Support
-
-##Contributing
-
 ##License
