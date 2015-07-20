@@ -40,10 +40,6 @@ return [
     | Relations naming form
     |--------------------------------------------------------------------------
     |
-    | Определяет, в каком числе будут именоватся связи ресурсов в БД.
-    | К примеру, plural чтобы связи ресурсов именовались в множественном числе: posts_id, users_id и т.д.
-    | или singular чтобы связи ресурсов именовались в единственном числе: post_id, user_id и т.д.
-    |
     | Specifies form of relation fields in the database
     | In example, 'posts_id' for plural form
     | or 'post_id' for singular form
@@ -53,6 +49,22 @@ return [
     */
 
     'relationsNamingForm' => singular,
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Path ro jsonDB file
+    |--------------------------------------------------------------------------
+    |
+    | Specifies path ro jsonDB file
+    | In example, 'posts_id' for plural form
+    | or 'post_id' for singular form
+    |
+    | Available Settings: singular, plural
+    |
+    */
+
+    'pathToDb' => '/../db/db.json',
 
 
 

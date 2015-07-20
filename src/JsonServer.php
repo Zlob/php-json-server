@@ -45,9 +45,9 @@ class JsonServer
      *
      * @param $dbPath
      */
-    public function __construct($dbPath)
+    public function __construct()
     {
-        $this->jsonDb = new JsonDataBase($dbPath);
+        $this->jsonDb = new JsonDataBase(__DIR__."/".Config::get('pathToDb'));
     }
 
     /**

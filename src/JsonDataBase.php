@@ -36,15 +36,13 @@ class JsonDataBase
             throw new \RuntimeException("cannot open file $pathToFile");
         }
         flock($this->dbFile, LOCK_EX);
-        $jsonString = fread($this->dbFile, filesize($pathToFile));
+        $jsonString = filesize($pathToFile) > 0 ? fread($this->dbFile, filesize($pathToFile)) : "";
         if (is_string($jsonString)) {
             $tables = json_decode($jsonString, true);
             if (is_array($tables)) {
                 foreach (json_decode($jsonString, true) as $tableName => $tableData) {
                     $this->tables[$tableName] = new JsonTable($tableData, $tableName, $this);
                 }
-            } else {
-                throw new \InvalidArgumentException('data should be JSON string');
             }
         } else {
             throw new \InvalidArgumentException('data should be JSON string');
