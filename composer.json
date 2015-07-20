@@ -1,9 +1,8 @@
 {
-  "name": "Zlob/jsonServer",
+  "name": "Zlob/phpJsonServer",
   "type": "library",
-  "description": "json server",
-  "keywords": ["json", "server"],
-  "homepage": "https://github.com/Zlob/super_closure",
+  "description": "simple REST API json server",
+  "keywords": ["json", "server", "REST API", "RESTful API"],
   "license": "MIT",
   "authors": [
     {
@@ -30,11 +29,6 @@
   "autoload-dev": {
     "psr-4": {
       "JsonServer\\Test\\": "tests/"
-    }
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "2.1-dev"
     }
   }
 }
