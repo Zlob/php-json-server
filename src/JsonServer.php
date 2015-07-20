@@ -162,10 +162,8 @@ class JsonServer
      */
     private function prepareForm($noun)
     {
-        //todo single global method
         if (!(Config::get('urlNamingForm') === Config::get('tableNamingForm'))) {
-            //todo another method
-            $method = Config::get('tableNamingForm') . 'ize';
+            $method = Config::get('tableNamingForm');
             return Inflector\Inflector::$method($noun);
         } else {
             return $noun;

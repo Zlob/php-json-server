@@ -17,9 +17,9 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
     {
         $this->fixture = new \JsonServer\JsonServer(getcwd().'/tests/singularDB.json');
         $config = \JsonServer\Config::getInstance();
-        $config->set('urlNamingForm', 'singular');
-        $config->set('tableNamingForm', 'singular');
-        $config->set('relationsNamingForm', 'singular');
+        $config->set('urlNamingForm', 'singularize');
+        $config->set('tableNamingForm', 'singularize');
+        $config->set('relationsNamingForm', 'singularize');
         $this->assertEquals($expected, $this->fixture->handleRequest($method, $url, $data));
     }
 
@@ -30,9 +30,9 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
     {
         $this->fixture = new \JsonServer\JsonServer(getcwd().'/tests/pluralDB.json');
         $config = \JsonServer\Config::getInstance();
-        $config->set('urlNamingForm', 'singular');
-        $config->set('tableNamingForm', 'plural');
-        $config->set('relationsNamingForm', 'singular');
+        $config->set('urlNamingForm', 'singularize');
+        $config->set('tableNamingForm', 'pluralize');
+        $config->set('relationsNamingForm', 'singularize');
         $this->assertEquals($expected, $this->fixture->handleRequest($method, $url,$data));
     }
 
@@ -54,9 +54,9 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
     {
         $this->fixture = new \JsonServer\JsonServer(getcwd().'/tests/singularDB.json');
         $config = \JsonServer\Config::getInstance();
-        $config->set('urlNamingForm', 'plural');
-        $config->set('tableNamingForm', 'singular');
-        $config->set('relationsNamingForm', 'singular');
+        $config->set('urlNamingForm', 'pluralize');
+        $config->set('tableNamingForm', 'singularize');
+        $config->set('relationsNamingForm', 'singularize');
         $this->assertEquals($expected, $this->fixture->handleRequest($method, $url, $data), $msg);
     }
 
@@ -67,9 +67,9 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
     {
         $this->fixture = new \JsonServer\JsonServer(getcwd().'/tests/pluralDB.json');
         $config = \JsonServer\Config::getInstance();
-        $config->set('urlNamingForm', 'plural');
-        $config->set('tableNamingForm', 'plural');
-        $config->set('relationsNamingForm', 'singular');
+        $config->set('urlNamingForm', 'pluralize');
+        $config->set('tableNamingForm', 'pluralize');
+        $config->set('relationsNamingForm', 'singularize');
         $this->assertEquals($expected, $this->fixture->handleRequest($method, $url, $data), $msg);
     }
 

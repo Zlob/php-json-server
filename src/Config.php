@@ -24,7 +24,7 @@ class Config implements \ArrayAccess
      */
     private function __construct()
     {
-        self::$items = json_decode(file_get_contents(__DIR__ . '/../config/config.json'), true);
+        self::$items = include_once(__DIR__ . '/../config/config.php');
     }
 
     protected function __clone()
@@ -37,7 +37,7 @@ class Config implements \ArrayAccess
      */
     static public function getInstance()
     {
-        if (is_null(self::$instance)) {
+        if (self::$instance === null) {
             self::$instance = new self();
         }
         return self::$instance;
@@ -51,7 +51,7 @@ class Config implements \ArrayAccess
      */
     public static function has($key)
     {
-        if (is_null(self::$instance)) {
+        if (self::$instance === null) {
             self::getInstance();
         }
         return array_key_exists($key, self::$items);
@@ -65,7 +65,7 @@ class Config implements \ArrayAccess
      */
     public static function get($key)
     {
-        if (is_null(self::$instance)) {
+        if (self::$instance === null) {
             self::getInstance();
         }
         return self::$items[$key];
@@ -80,7 +80,7 @@ class Config implements \ArrayAccess
      */
     public static function set($key, $value = null)
     {
-        if (is_null(self::$instance)) {
+        if (self::$instance === null) {
             self::getInstance();
         }
         self::$items[$key] = $value;
@@ -106,5 +106,4 @@ class Config implements \ArrayAccess
     {
         unset(self::$items[$offset]);
     }
-
 }

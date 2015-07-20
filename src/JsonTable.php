@@ -243,8 +243,7 @@ class JsonTable implements \ArrayAccess
     private function getParentKeyName($noun)
     {
         if (!(Config::get('urlNamingForm') === Config::get('relationsNamingForm'))) {
-            //todo another method
-            $method = Config::get('relationsNamingForm') . 'ize';
+            $method = Config::get('relationsNamingForm');
             return Inflector\Inflector::$method($noun) . "_id";
         } else {
             return $noun . "_id";
