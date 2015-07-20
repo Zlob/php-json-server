@@ -1,5 +1,5 @@
 {
-  "name": "Zlob/phpJsonServer",
+  "name": "zlob/php-json-server",
   "type": "library",
   "description": "simple REST API json server",
   "keywords": ["json", "server", "REST API", "RESTful API"],
