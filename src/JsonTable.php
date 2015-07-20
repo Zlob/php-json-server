@@ -160,6 +160,9 @@ class JsonTable implements \ArrayAccess
         foreach ($this->rows as $row) {
             $ids[] = $row->id;
         }
+        if(count($ids) === 0){
+            return 1;
+        }
         sort($ids);
         $max = end($ids);
         return ++$max;
