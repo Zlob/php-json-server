@@ -13,12 +13,6 @@ Inspired by [JSON Server](https://github.com/typicode/json-server)
 [![Total Downloads](https://poser.pugx.org/zlob/php-json-server/downloads)](https://packagist.org/packages/zlob/php-json-server)
 [![License](https://poser.pugx.org/zlob/php-json-server/license)](https://packagist.org/packages/zlob/php-json-server)
 
-##Features
-
-* обработка GET POST PATCH DELETE запросов
-* простое редактирование ДБ файла
-* еще..
-
 ##Install
 
 via composer: composer.phar require zlob/php-json-server
@@ -84,7 +78,7 @@ Route::any('api/{all}', "JsonServerController@handleRequest")->where('all', '.*'
 
 
 Based on the previous db.json file, here are all routes:
-
+```
 GET    /posts
 GET    /posts/1
 GET    /posts/1/comments
@@ -92,7 +86,7 @@ POST   /posts
 PUT    /posts/1
 PATCH  /posts/1
 DELETE /posts/1
-
+```
 симфони
 
 ##Documentation
