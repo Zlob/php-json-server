@@ -89,9 +89,5 @@ DELETE /posts/1
 ```
 симфони
 
-##Documentation
-
-расписать конфиги
-
 ##License
 MIT - [Zlob](https://github.com/zlob)
