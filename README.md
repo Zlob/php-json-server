@@ -5,9 +5,9 @@ Easy to use library, that provides you REST API server in a few minutes.
 Created for front-end developers who need a quick back-end for prototyping.
 May be used with you lovely php web framework
 
-####**NOT FOR PRODUCTION**
-
 Inspired by [JSON Server](https://github.com/typicode/json-server) 
+
+####**NOT FOR PRODUCTION**
 
 [![Latest Stable Version](https://poser.pugx.org/zlob/php-json-server/v/stable)](https://packagist.org/packages/zlob/php-json-server) 
 [![Total Downloads](https://poser.pugx.org/zlob/php-json-server/downloads)](https://packagist.org/packages/zlob/php-json-server)
