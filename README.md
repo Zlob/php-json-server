@@ -15,7 +15,9 @@ Inspired by [JSON Server](https://github.com/typicode/json-server)
 обработка GET POST PATCH DELETE запросов
 простое редактирование ДБ файла
 
-[![Latest Stable Version](https://poser.pugx.org/zlob/php-json-server/v/stable)](https://packagist.org/packages/zlob/php-json-server) [![Total Downloads](https://poser.pugx.org/zlob/php-json-server/downloads)](https://packagist.org/packages/zlob/php-json-server) [![Latest Unstable Version](https://poser.pugx.org/zlob/php-json-server/v/unstable)](https://packagist.org/packages/zlob/php-json-server) [![License](https://poser.pugx.org/zlob/php-json-server/license)](https://packagist.org/packages/zlob/php-json-server)
+[![Latest Stable Version](https://poser.pugx.org/zlob/php-json-server/v/stable)](https://packagist.org/packages/zlob/php-json-server) 
+[![Total Downloads](https://poser.pugx.org/zlob/php-json-server/downloads)](https://packagist.org/packages/zlob/php-json-server)
+[![License](https://poser.pugx.org/zlob/php-json-server/license)](https://packagist.org/packages/zlob/php-json-server)
 
 ##Install
 
