@@ -15,10 +15,9 @@ Inspired by [JSON Server](https://github.com/typicode/json-server)
 
 ##Features
 
-обработка GET POST PATCH DELETE запросов
-простое редактирование ДБ файла
-
-
+1. обработка GET POST PATCH DELETE запросов
+2. простое редактирование ДБ файла
+3. еще..
 
 ##Install
 
