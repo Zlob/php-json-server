@@ -79,7 +79,19 @@ Route::any('api/{all}', "JsonServerController@handleRequest")->where('all', '.*'
     ]
 }
 ```
-* Thats all! Now, all requests to.
+* Thats all! Now, if you go to "/api/posts" you'll get
+{ "id": 1, "title": "json-server", "author": "zlob" }
+
+
+Based on the previous db.json file, here are all routes:
+
+GET    /posts
+GET    /posts/1
+GET    /posts/1/comments
+POST   /posts
+PUT    /posts/1
+PATCH  /posts/1
+DELETE /posts/1
 
 симфони
 
@@ -88,3 +100,4 @@ Route::any('api/{all}', "JsonServerController@handleRequest")->where('all', '.*'
 расписать конфиги
 
 ##License
+MIT - [Zlob](https://github.com/zlob)
