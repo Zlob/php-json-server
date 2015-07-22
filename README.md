@@ -5,8 +5,9 @@ Easy to use library, that provides you REST API server in a few minutes.
 Created for front-end developers who need a quick back-end for prototyping.
 
 интегрируется во фреймворк
+**для прототипирования, а не для продакшена**
 
-для прототипирования, а не для продакшена
+
 
 Inspired by [JSON Server](https://github.com/typicode/json-server) 
 
@@ -17,9 +18,7 @@ Inspired by [JSON Server](https://github.com/typicode/json-server)
 
 ##Install
 
-Через терминал командой composer require zlob/php-json-server
-
-Теперь, в вашем любимом фреймворке, вам нужно переадресовывать все запросы json-серверу
+via composer: composer.phar require zlob/php-json-server
 
 ##Example
 
