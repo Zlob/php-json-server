@@ -55,8 +55,30 @@ class JsonServerController extends Controller
 ``` php
 Route::any('api/{all}', "JsonServerController@handleRequest")->where('all', '.*');
 ```
-* Finaly, we can optionaly fill our database with some data. To do this, open php-json-server/db/db.json file and add some data.
-
+* Finaly, we can optionaly fill our database with some data. To do this, open php-json-server/db/db.json file and add some data:
+``` json
+{
+    "posts": [
+        {
+            "id": 1,
+            "title": "json-server",
+            "author": "zlob"
+        },
+        {
+            "id": 2,
+            "title": "json-server",
+            "author": "zlob"
+        }
+    ],
+    "comments": [
+        {
+            "id": 1,
+            "body": "some comment",
+            "post_id": 1
+        }
+    ]
+}
+```
 * Thats all! Now, all requests to.
 
 симфони
