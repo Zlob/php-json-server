@@ -55,8 +55,9 @@ class JsonServerController extends Controller
 ``` php
 Route::any('api/{all}', "JsonServerController@handleRequest")->where('all', '.*');
 ```
-* Thats all! Now,  all requests to 
-теперь все запросы к api/* будут транслироваться в php json server
+* Finaly, we can optionaly fill our database with some data. To do this, open php-json-server/db/db.json file and add some data.
+
+* Thats all! Now, all requests to.
 
 симфони
 
