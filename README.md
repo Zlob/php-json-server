@@ -19,7 +19,7 @@ via composer: ```composer.phar require zlob/php-json-server```
 
 ##Example
 
-You an use this json-server with any php web framework. Here is some examples how to integrate it with Laravel and Symfony
+You an use this json-server with any php web framework. Here is some examples how to integrate it with Laravel and Symfony 2
 
 ###Laravel 5.1
 
@@ -87,7 +87,7 @@ PUT    /posts/1
 PATCH  /posts/1
 DELETE /posts/1
 ```
-симфони
+###Symfony 2
 
 ##License
 MIT - [Zlob](https://github.com/zlob)
