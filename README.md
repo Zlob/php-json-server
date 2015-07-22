@@ -27,9 +27,9 @@ You an use this json-server with any php web framework. Here is some examples ho
 
 ###Laravel 5.1
 
-1. First, you need to create controller:
+* First, you need to create controller:
 
-```
+``` php
 <?php
 
 namespace App\Http\Controllers;
@@ -49,14 +49,11 @@ class JsonServerController extends Controller
     }
 }
 ```
-
-2. Then, add to routes.php file new route, to link '/api/*' rout with ouer controller method handleRequest
-
-```
+* Then, add to routes.php file new route, to link '/api/*' rout with our controller method handleRequest
+``` php
 Route::any('api/{all}', "JsonServerController@handleRequest")->where('all', '.*');
 ```
-
-3. Thats all! Now,  all requests to 
+* Thats all! Now,  all requests to 
 теперь все запросы к api/* будут транслироваться в php json server
 
 симфони
