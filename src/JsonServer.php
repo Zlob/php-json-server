@@ -45,7 +45,7 @@ class JsonServer
      */
     public function __construct()
     {
-        $this->jsonDb = new JsonDataBase(__DIR__."/".Config::get('pathToDb'));
+        $this->jsonDb = new JsonDataBase(__DIR__.Config::get('pathToDb'));
     }
 
     /**
@@ -67,8 +67,8 @@ class JsonServer
     public function handleRequest($method, $uri, $data)
     {
         $this->data = $data;
-        $this->path = $uri[0];  //todo maybe throw exception if $uri[0] === "" ??!
-        $this->params = explode('/', $uri[0]);
+        $this->path = $uri;  //todo maybe throw exception if $uri === "" ??!
+        $this->params = explode('/', $uri);
         return $this->$method();
     }
 
