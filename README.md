@@ -3,10 +3,9 @@
 
 Easy to use library, that provides you REST API server in a few minutes.
 Created for front-end developers who need a quick back-end for prototyping.
+May be used with you lovely php web framework
 
-интегрируется во фреймворк
-
-**для прототипирования, а не для продакшена**
+####**NOT FOR PRODUCTION**
 
 Inspired by [JSON Server](https://github.com/typicode/json-server) 
 
