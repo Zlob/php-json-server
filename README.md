@@ -58,6 +58,6 @@ Route::any('api/{all}', "JsonServerController@handleRequest")->where('all', '.*'
 
 ##Documentation
 
-расписать конфиги
+расписать конфиги и тд
 
 ##License
