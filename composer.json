@@ -13,7 +13,7 @@
     }
   ],
   "require": {
-    "php": ">=5.4",
+    "php": ">=5.5.9",
     "nikic/php-parser": "~1.0",
     "doctrine/inflector": "^1.0"
   },
@@ -24,11 +24,6 @@
   "autoload": {
     "psr-4": {
       "JsonServer\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "JsonServer\\Test\\": "tests/"
     }
   }
 }
