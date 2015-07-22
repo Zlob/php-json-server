@@ -42,8 +42,6 @@ class JsonServer
 
     /**
      * Create new JsonServer instance
-     *
-     * @param $dbPath
      */
     public function __construct()
     {
