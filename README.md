@@ -15,7 +15,7 @@ Inspired by [JSON Server](https://github.com/typicode/json-server)
 
 ##Install
 
-via composer: composer.phar require zlob/php-json-server
+via composer: ```composer.phar require zlob/php-json-server```
 
 ##Example
 
