@@ -5,9 +5,8 @@ Easy to use library, that provides you REST API server in a few minutes.
 Created for front-end developers who need a quick back-end for prototyping.
 
 интегрируется во фреймворк
+
 **для прототипирования, а не для продакшена**
-
-
 
 Inspired by [JSON Server](https://github.com/typicode/json-server) 
 
@@ -58,5 +57,7 @@ Route::any('api/{all}', "JsonServerController@handleRequest")->where('all', '.*'
 симфони
 
 ##Documentation
+
+расписать конфиги
 
 ##License
