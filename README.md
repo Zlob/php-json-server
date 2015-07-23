@@ -19,9 +19,9 @@ via composer: ```composer require zlob/php-json-server```
 
 ##Example
 
-You an use this json-server with any php web framework. Here is some examples how to integrate it with Laravel
+You can use this library with any php web framework. Here is example how to integrate it with Laravel 5.1:
 
-* First, you need to create controller:
+* First, you need to create controller, where we will use php-json-server:
 
 ``` php
 <?php
@@ -43,7 +43,7 @@ class JsonServerController extends Controller
     }
 }
 ```
-* Then, add to routes.php file new route, to link '/api/*' rout with our controller method handleRequest
+* Then, add to routes.php file new route, to link '/api/*' route with our controller method handleRequest
 ``` php
 Route::any('api/{all}', "JsonServerController@handleRequest")->where('all', '.*');
 ```
@@ -73,7 +73,6 @@ Route::any('api/{all}', "JsonServerController@handleRequest")->where('all', '.*'
 ```
 * Thats all! Now, if you go to "/api/posts" you'll get
 { "id": 1, "title": "json-server", "author": "zlob" }
-
 
 Based on the previous db.json file, here are all routes:
 ```
