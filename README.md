@@ -85,7 +85,5 @@ PUT    /posts/1
 PATCH  /posts/1
 DELETE /posts/1
 ```
-###Symfony 2
-
 ##License
 MIT - [Zlob](https://github.com/zlob)
