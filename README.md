@@ -19,9 +19,7 @@ via composer: ```composer.phar require zlob/php-json-server```
 
 ##Example
 
-You an use this json-server with any php web framework. Here is some examples how to integrate it with Laravel and Symfony 2
-
-###Laravel 5.1
+You an use this json-server with any php web framework. Here is some examples how to integrate it with Laravel
 
 * First, you need to create controller:
 
