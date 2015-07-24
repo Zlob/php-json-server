@@ -1,8 +1,10 @@
 language: php
 php:
   - 5.6
-  
+
+script: echo pwd
+
 install:
   - composer install
   
-script: phpunit --configuration $DB.phpunit.xml
+script: phpunit --configuration phpunit.xml
