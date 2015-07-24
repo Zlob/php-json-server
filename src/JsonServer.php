@@ -116,7 +116,7 @@ class JsonServer
     }
 
     /**
-     * Handle PATCH request - update existing resource
+     * Handle PATCH request - update part of existing resource
      */
     public function PATCH()
     {
@@ -132,6 +132,14 @@ class JsonServer
         } else {
             throw new BadFunctionCallException("path $this->path must contaign id");
         }
+    }
+
+    /**
+     * Handle PUT request - update existing resource. behavior same to PATCH
+     */
+    public function PUT()
+    {
+        return $this->PATCH();
     }
 
     /**
