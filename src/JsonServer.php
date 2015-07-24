@@ -127,7 +127,7 @@ class JsonServer
         if ($id) {
             $table = $this->jsonDb->$tabName;
             $row = $table->update($id, $this->data);
-            $this->db->save();
+            $this->jsonDb->save();
             return $row->toArray();
         } else {
             throw new BadFunctionCallException("path $this->path must contaign id");
@@ -154,7 +154,7 @@ class JsonServer
         if ($id) {
             $table = $this->jsonDb->$tabName;
             $table->delete($id, $this->data);
-            $this->db->save();
+            $this->jsonDb->save();
         } else {
             throw new BadFunctionCallException("path $this->path must contaign id");
         }
