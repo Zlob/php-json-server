@@ -45,7 +45,7 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
             ['GET', 'post/1', [], ['id'=>1, 'title' => 'json-server', 'author' => 'zlob'], 'get post/1'],
             ['GET', 'post/1/comment/1', [], ['id'=>1, 'body' => 'some comment', 'post_id' => 1], 'get post/1/comment/1'],
             ['GET', 'unknown', [], [], 'get unknown'],
-            ['GET', 'unknown/1', [], [], 'get unknown/1'],
+            ['GET', 'unknown/1', [], null, 'get unknown/1'],
         ];
     }
 
@@ -84,7 +84,7 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
             ['GET', 'posts/1', [], ['id'=>1, 'title' => 'json-server', 'author' => 'zlob'], 'get posts/1'],
             ['GET', 'posts/1/comments/1', [], ['id'=>1, 'body' => 'some comment', 'post_id' => 1], 'get posts/1/comments/1'],
             ['GET', 'unknowns', [], [], 'get unknowns'],
-            ['GET', 'unknowns/1', [], [], 'get unknowns/1'],
+            ['GET', 'unknowns/1', [], null, 'get unknowns/1'],
         ];
     }
 }

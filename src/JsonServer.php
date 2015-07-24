@@ -92,7 +92,7 @@ class JsonServer
         if ($result) {
             return $result->toArray();
         } else {
-            return [];
+            return null;
         }
     }
 
