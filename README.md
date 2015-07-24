@@ -13,23 +13,15 @@ Inspired by [JSON Server](https://github.com/typicode/json-server)
 [![Total Downloads](https://poser.pugx.org/zlob/php-json-server/downloads)](https://packagist.org/packages/zlob/php-json-server)
 [![License](https://poser.pugx.org/zlob/php-json-server/license)](https://packagist.org/packages/zlob/php-json-server)
 
-##Features
-
-* обработка GET POST PATCH DELETE запросов
-* простое редактирование ДБ файла
-* еще..
-
 ##Install
 
-via composer: composer.phar require zlob/php-json-server
+via composer: ```composer require zlob/php-json-server```
 
 ##Example
 
-You an use this json-server with any php web framework. Here is some examples how to integrate it with Laravel and Symfony
+You can use this library with any php web framework. Here is example how to integrate it with Laravel 5.1:
 
-###Laravel 5.1
-
-* First, you need to create controller:
+* First, you need to create controller, where we will use php-json-server:
 
 ``` php
 <?php
@@ -51,7 +43,7 @@ class JsonServerController extends Controller
     }
 }
 ```
-* Then, add to routes.php file new route, to link '/api/*' rout with our controller method handleRequest
+* Then, add to routes.php file new route, to link '/api/*' route with our controller method handleRequest
 ``` php
 Route::any('api/{all}', "JsonServerController@handleRequest")->where('all', '.*');
 ```
@@ -82,9 +74,8 @@ Route::any('api/{all}', "JsonServerController@handleRequest")->where('all', '.*'
 * Thats all! Now, if you go to "/api/posts" you'll get
 { "id": 1, "title": "json-server", "author": "zlob" }
 
-
 Based on the previous db.json file, here are all routes:
-
+```
 GET    /posts
 GET    /posts/1
 GET    /posts/1/comments
@@ -92,12 +83,6 @@ POST   /posts
 PUT    /posts/1
 PATCH  /posts/1
 DELETE /posts/1
-
-симфони
-
-##Documentation
-
-расписать конфиги
-
+```
 ##License
 MIT - [Zlob](https://github.com/zlob)
