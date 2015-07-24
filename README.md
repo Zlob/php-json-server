@@ -12,6 +12,7 @@ Inspired by [JSON Server](https://github.com/typicode/json-server)
 [![Latest Stable Version](https://poser.pugx.org/zlob/php-json-server/v/stable)](https://packagist.org/packages/zlob/php-json-server) 
 [![Total Downloads](https://poser.pugx.org/zlob/php-json-server/downloads)](https://packagist.org/packages/zlob/php-json-server)
 [![License](https://poser.pugx.org/zlob/php-json-server/license)](https://packagist.org/packages/zlob/php-json-server)
+[![Build Status](https://travis-ci.org/Zlob/php-json-server.svg?branch=master)](https://travis-ci.org/Zlob/php-json-server)
 
 ##Install
 
