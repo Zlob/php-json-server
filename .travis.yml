@@ -4,3 +4,5 @@ php:
   
 install:
   - composer install
+  
+script: phpunit --configuration $DB.phpunit.xml
