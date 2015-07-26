@@ -66,6 +66,51 @@ return [
 
     'pathToDb' => '/../db/db.json',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Fields auto sorting
+    |--------------------------------------------------------------------------
+    |
+    | By default, fields in row sorted automatically
+    | with 'fieldsAutoSortingFunc' function (described below)
+    | before saving and fetching.
+    |
+    | In case of false value, rows will be stored in db
+    | and displayed in order they came co JsonServer
+    |
+    */
+
+    'fieldsAutoSorting' => true,
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Fields auto sorting function
+    |--------------------------------------------------------------------------
+    |
+    | Default fields sorting function.
+    | Used as second param in uksort() function
+    |
+    */
+
+    'fieldsAutoSortingFunc' =>  function ($a, $b)
+    {
+        if ($a === $b){
+            return 0;
+        }
+        if ($a === 'id'){
+            return -1;
+        }
+        if ($b === 'id'){
+            return 1;
+        }
+        if ($a > $b){
+            return 1;
+        }
+        if ($a < $b){
+            return -1;
+        }
+    },
 
 
 ];

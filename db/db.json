@@ -1,8 +1,8 @@
 {
   "posts": [
     {
-      "id": 1,
       "title": "json-server",
+      "id": 1,
       "author": "zlob"
     },
     {

@@ -88,6 +88,7 @@ class JsonRow
         }
     }
 
+
     /**
      * Return array representation of row
      *
@@ -95,7 +96,12 @@ class JsonRow
      */
     public function toArray()
     {
+        if (Config::get('fieldsAutoSorting')){
+            uksort ($this->fields, Config::get('fieldsAutoSortingFunc'));
+        }
         return $this->fields;
     }
+
+
 
 }
