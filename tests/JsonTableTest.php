@@ -7,7 +7,7 @@ class JsonTableTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fixture = new \JsonServer\JsonTable([['id' => 1, 'parent_id' => 2],['id' => 3, 'parent_id' => 2],['id' => 5, 'parent_id' => 6]], "");
+        $this->fixture = new \JsonServer\JsonTable([['id' => 3, 'parent_id' => 2],['id' => 1, 'parent_id' => 2],['id' => 5, 'parent_id' => 6]], "");
     }
 
     protected function tearDown()
@@ -66,14 +66,9 @@ class JsonTableTest extends PHPUnit_Framework_TestCase
 
     public function testToArrayIsOk()
     {
-        self::assertEquals($this->fixture->getNewId(), 6, 'get new id is working');
+        self::assertEquals($this->fixture->toArray(), [['id' => 1, 'parent_id' => 2],['id' => 3, 'parent_id' => 2],['id' => 5, 'parent_id' => 6]], 'toArray is working');
     }
-
-    public function testPostIsOk()
-    {
-        self::assertEquals($this->fixture->getNewId(), 6, 'get new id is working');
-    }
-
+    
     public function testInsertIsOk()
     {
         $before = $this->fixture->count();

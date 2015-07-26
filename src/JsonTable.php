@@ -179,7 +179,27 @@ class JsonTable implements \ArrayAccess
         foreach ($this->rows as $row) {
             $result[] = $row->toArray();
         }
+        $this->sort($result);
+
+
         return $result;
+    }
+
+    private function sort(&$result)
+    {
+        $sortField = 'id'; //todo custom sorting
+        $sortFunc = function($a, $b) use ($sortField){
+            if ($a[$sortField] === $b[$sortField]){
+                return 0;
+            }
+            if ($a[$sortField] > $b[$sortField]){
+                return 1;
+            }
+            if ($a[$sortField] < $b[$sortField]){
+                return -1;
+            }
+        };
+        usort ($result, $sortFunc);
     }
 
     /**

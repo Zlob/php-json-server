@@ -34,6 +34,14 @@ class JsonRowTest extends PHPUnit_Framework_TestCase
         static::assertEquals($this->fixture->toArray(), $dataExpext, 'mass assignment trough setData is working');
     }
 
+    public function testSortingFields()
+    {
+        $data = ['field2' => 22, 'field1' => 11,'id'=>77 ];
+        $this->fixture->setData($data);
+        $dataExpext = ['id'=>0, 'field1' => 11, 'field2' => 22];
+        static::assertEquals($this->fixture->toArray(), $dataExpext, 'fields sorting correctly');
+    }
+
     /**
      * @expectedException        OutOfRangeException
      * @expectedExceptionMessage there is no key unknownField in row
