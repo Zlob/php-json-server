@@ -68,7 +68,7 @@ class JsonTableTest extends PHPUnit_Framework_TestCase
     {
         self::assertEquals($this->fixture->toArray(), [['id' => 1, 'parent_id' => 2],['id' => 3, 'parent_id' => 2],['id' => 5, 'parent_id' => 6]], 'toArray is working');
     }
-    
+
     public function testInsertIsOk()
     {
         $before = $this->fixture->count();

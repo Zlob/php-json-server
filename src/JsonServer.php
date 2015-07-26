@@ -107,7 +107,7 @@ class JsonServer
         $id = $last['id'];
         if (!$id) {
             $table = $this->jsonDb->$tabName;
-            $row = $table->insert($this->data);
+            $row = $table->insert($this->data, $this->getParent($filter));
             $this->jsonDb->save();
             return $row->toArray();
         } else {
@@ -196,4 +196,10 @@ class JsonServer
         }
         return $result;
     }
+
+    private function getParent($filter)
+    {
+        return count($filter) === 0 ? null : array_pop($filter);
+    }
+
 }

@@ -65,11 +65,7 @@ class JsonRow
      */
     public function __set($key, $value)
     {
-        if (array_key_exists($key, $this->fields)) {
-            $this->fields[$key] = $value;
-        } else {
-            throw new \OutOfRangeException("there is no key $key in row");
-        }
+        $this->fields[$key] = $value;
     }
 
 
@@ -88,7 +84,6 @@ class JsonRow
         }
     }
 
-
     /**
      * Return array representation of row
      *
@@ -101,7 +96,4 @@ class JsonRow
         }
         return $this->fields;
     }
-
-
-
 }

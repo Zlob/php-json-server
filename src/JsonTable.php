@@ -108,9 +108,13 @@ class JsonTable implements \ArrayAccess
      * @param $data
      * @return int
      */
-    public function insert($data)
+    public function insert($data, $parent = null)
     {
         $row = new JsonRow($data, $this);
+        if($parent){
+            $parentName = $this->getParentKeyName($parent['table']);
+            $row->$parentName = $parent['id'];
+        }
         $this->rows[] = $row;
         return $row;
     }
@@ -180,11 +184,13 @@ class JsonTable implements \ArrayAccess
             $result[] = $row->toArray();
         }
         $this->sort($result);
-
-
         return $result;
     }
 
+    /**
+     * Sort rows in table
+     * @param $result
+     */
     private function sort(&$result)
     {
         $sortField = 'id'; //todo custom sorting
