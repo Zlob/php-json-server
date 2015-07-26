@@ -92,7 +92,7 @@ class JsonServer
         if ($result) {
             return $result->toArray();
         } else {
-            return null;
+            return call_user_func(Config::get('resourceNotFound'));
         }
     }
 

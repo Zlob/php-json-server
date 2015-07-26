@@ -112,5 +112,19 @@ return [
         }
     },
 
+    /*
+    |--------------------------------------------------------------------------
+    | 'Resource not found' function
+    |--------------------------------------------------------------------------
+    |
+    | Default behaviour in case 'resource not found'
+    |
+    */
+
+    'resourceNotFound' =>  function ()
+    {
+        return null;
+    },
+
 
 ];
