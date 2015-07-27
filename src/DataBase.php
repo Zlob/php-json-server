@@ -6,7 +6,7 @@ namespace JsonServer;
  * Class JsonDataBase
  * @package JsonServer
  */
-class JsonDataBase
+class DataBase
 {
 
     /**
@@ -41,7 +41,7 @@ class JsonDataBase
             $tables = json_decode($jsonString, true);
             if (is_array($tables)) {
                 foreach (json_decode($jsonString, true) as $tableName => $tableData) {
-                    $this->tables[$tableName] = new JsonTable($tableData, $tableName, $this);
+                    $this->tables[$tableName] = new Table($tableData, $tableName, $this);
                 }
             }
         } else {
@@ -85,7 +85,7 @@ class JsonDataBase
         if (array_key_exists($name, $this->tables)) {
             return $this->tables[$name];
         } else {
-            $this->tables[$name] = new JsonTable([], $name, $this);
+            $this->tables[$name] = new Table([], $name, $this);
             return $this->tables[$name];
         }
     }

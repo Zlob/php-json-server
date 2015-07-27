@@ -35,7 +35,7 @@ class JsonServer
     /**
      * jsonDataBase instance
      *
-     * @var JsonDataBase
+     * @var DataBase
      */
     private $jsonDb;
 
@@ -45,7 +45,7 @@ class JsonServer
      */
     public function __construct()
     {
-        $this->jsonDb = new JsonDataBase(__DIR__.Config::get('pathToDb'));
+        $this->jsonDb = new DataBase(__DIR__.Config::get('pathToDb'));
     }
 
     /**

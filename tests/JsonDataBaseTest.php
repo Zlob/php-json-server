@@ -7,7 +7,7 @@ class JsonDataBaseTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fixture = new \JsonServer\JsonDataBase(getcwd().'/tests/pluralDB.json');
+        $this->fixture = new \JsonServer\DataBase(getcwd().'/tests/pluralDB.json');
     }
 
     protected function tearDown()
@@ -18,7 +18,7 @@ class JsonDataBaseTest extends PHPUnit_Framework_TestCase
 
     public function testGetTable()
     {
-        self::assertInstanceOf('JsonServer\JsonTable', $this->fixture->post);
+        self::assertInstanceOf('JsonServer\Table', $this->fixture->post);
     }
 
 }

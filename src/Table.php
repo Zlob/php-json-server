@@ -8,7 +8,7 @@ use Doctrine\Common\Inflector;
  * Class JsonTable
  * @package JsonServer
  */
-class JsonTable implements \ArrayAccess
+class Table implements \ArrayAccess
 {
 
     /**
@@ -44,8 +44,8 @@ class JsonTable implements \ArrayAccess
         if (is_array($data)) {
             foreach ($data as $row) {
                 if (is_array($row)) {
-                    $this->rows[] = new JsonRow($row, $this);
-                } elseif (get_class($row) === 'JsonServer\JsonRow') {
+                    $this->rows[] = new Row($row, $this);
+                } elseif (get_class($row) === 'JsonServer\Row') {
                     $this->rows[] = &$row;
                 } else {
                     throw new \InvalidArgumentException('data should be array or object of JsonRow');
@@ -61,7 +61,7 @@ class JsonTable implements \ArrayAccess
      *
      * @param $key
      * @param $value
-     * @return JsonTable
+     * @return Table
      */
     public function where($key, $value)
     {
@@ -92,7 +92,7 @@ class JsonTable implements \ArrayAccess
      * Filter rows by related entity id
      *
      * @param $parent - array with 'table' and 'id' keys
-     * @return $this|JsonTable
+     * @return $this|Table
      */
     public function filterByParent($parent)
     {
@@ -110,7 +110,7 @@ class JsonTable implements \ArrayAccess
      */
     public function insert($data, $parent = null)
     {
-        $row = new JsonRow($data, $this);
+        $row = new Row($data, $this);
         if($parent){
             $parentName = $this->getParentKeyName($parent['table']);
             $row->$parentName = $parent['id'];

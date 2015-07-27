@@ -7,7 +7,7 @@ class JsonTableTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fixture = new \JsonServer\JsonTable([['id' => 3, 'parent_id' => 2],['id' => 1, 'parent_id' => 2],['id' => 5, 'parent_id' => 6]], "");
+        $this->fixture = new \JsonServer\Table([['id' => 3, 'parent_id' => 2],['id' => 1, 'parent_id' => 2],['id' => 5, 'parent_id' => 6]], "");
     }
 
     protected function tearDown()
@@ -17,12 +17,12 @@ class JsonTableTest extends PHPUnit_Framework_TestCase
 
     public function testConstructorArray()
     {
-        new \JsonServer\JsonTable([['id' => 1, 'parent_id' => 2],['id' => 3, 'parent_id' => 4],['id' => 5, 'parent_id' => 6]], "");
+        new \JsonServer\Table([['id' => 1, 'parent_id' => 2],['id' => 3, 'parent_id' => 4],['id' => 5, 'parent_id' => 6]], "");
     }
 
     public function testConstructorJsonRow()
     {
-        new \JsonServer\JsonTable([new \JsonServer\JsonRow(['id' => 1, 'parent_id' => 2]),new \JsonServer\JsonRow(['id' => 3, 'parent_id' => 4]),new \JsonServer\JsonRow(['id' => 5, 'parent_id' => 6])], "");
+        new \JsonServer\Table([new \JsonServer\Row(['id' => 1, 'parent_id' => 2]),new \JsonServer\Row(['id' => 3, 'parent_id' => 4]),new \JsonServer\Row(['id' => 5, 'parent_id' => 6])], "");
     }
 
     /**
@@ -31,22 +31,22 @@ class JsonTableTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructorFails()
     {
-        new \JsonServer\JsonTable(null, "");
+        new \JsonServer\Table(null, "");
     }
 
     public function testWhereExist()
     {
-        self::assertEquals(get_class($this->fixture->where('id', 1)), 'JsonServer\JsonTable', 'where with right id is working');
+        self::assertEquals(get_class($this->fixture->where('id', 1)), 'JsonServer\Table', 'where with right id is working');
     }
 
     public function testWhereNotExist()
     {
-        self::assertEquals(get_class($this->fixture->where('id', 777)), 'JsonServer\JsonTable', 'where with wrong id is working' );
+        self::assertEquals(get_class($this->fixture->where('id', 777)), 'JsonServer\Table', 'where with wrong id is working' );
     }
 
     public function testFindExist()
     {
-        self::assertEquals(get_class($this->fixture->find(1)), 'JsonServer\JsonRow', 'find with right id is working');
+        self::assertEquals(get_class($this->fixture->find(1)), 'JsonServer\Row', 'find with right id is working');
     }
 
     public function testFindNotExist()
@@ -56,7 +56,7 @@ class JsonTableTest extends PHPUnit_Framework_TestCase
 
     public function testFilterByParentOk()
     {
-        self::assertEquals(get_class($this->fixture->filterByParent(['table' => 'parents', 'id' => 2])), 'JsonServer\JsonTable', 'filter by parent is working');
+        self::assertEquals(get_class($this->fixture->filterByParent(['table' => 'parents', 'id' => 2])), 'JsonServer\Table', 'filter by parent is working');
     }
 
     public function testGetNewIdIsOk()

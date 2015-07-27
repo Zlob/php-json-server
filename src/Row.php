@@ -6,7 +6,7 @@ namespace JsonServer;
  * Class JsonRow
  * @package JsonServer
  */
-class JsonRow
+class Row
 {
     /**
      * The row fields

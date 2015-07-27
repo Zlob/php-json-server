@@ -7,7 +7,7 @@ class JsonRowTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fixture = new \JsonServer\JsonRow(['id'=>0, 'field1' => 1, 'field2' => 2]);
+        $this->fixture = new \JsonServer\Row(['id'=>0, 'field1' => 1, 'field2' => 2]);
     }
 
     protected function tearDown()
@@ -63,7 +63,7 @@ class JsonRowTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructorFails()
     {
-        new \JsonServer\JsonRow('wrong param');
+        new \JsonServer\Row('wrong param');
     }
 
 }
