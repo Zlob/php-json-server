@@ -32,7 +32,6 @@ class Table implements \ArrayAccess
      */
     private $tabName;
 
-
     /**
      * sorting field
      * @var string
@@ -44,6 +43,12 @@ class Table implements \ArrayAccess
      * @var string
      */
     private $sortOrder = 'asc';
+
+    private $start = null;
+
+    private $end = null;
+
+    private $limit = null;
 
     /**
      * Create a new JsonTable instance
@@ -192,34 +197,45 @@ class Table implements \ArrayAccess
      */
     public function toArray()
     {
+        $this->sort();
+        $this->limits();
         $result = [];
         foreach ($this->rows as $row) {
             $result[] = $row->toArray();
         }
-        $this->sort($result);
         return $result;
+
+    }
+
+    /**
+     *limit result
+     */
+    private function limits()
+    {
+        $offset = $this->start ?: 0;
+        $length = max($this->end ? $this->end - $offset : null, $this->limit);
+        $this->rows = array_slice($this->rows, $offset, $length);
     }
 
     /**
      * Sort rows in table
-     * @param $result
      */
-    private function sort(&$result)
+    private function sort()
     {
         $sortField = $this->sortField;
         $sortOrder = $this->sortOrder;
         $sortFunc = function($a, $b) use ( $sortField, $sortOrder ){
-            if ($a[$sortField] === $b[$sortField]){
+            if ($a->$sortField === $b->$sortField){
                 return 0;
             }
-            if ($a[$sortField] > $b[$sortField]){
+            if ($a->$sortField > $b->$sortField){
                 return $sortOrder === 'asc' ? 1 : -1;
             }
-            if ($a[$sortField] < $b[$sortField]){
+            if ($a->$sortField < $b->$sortField){
                 return $sortOrder === 'asc' ? -1 : 1;
             }
         };
-        usort ($result, $sortFunc);
+        usort ($this->rows, $sortFunc);
     }
 
     /**
@@ -274,7 +290,9 @@ class Table implements \ArrayAccess
      */
     private function filter($callback)
     {
-        return new static(array_filter($this->rows, $callback), $this->tabName);
+        $table = clone $this;
+        $table->rows = array_slice(array_filter($this->rows, $callback),0);
+        return $table;
     }
 
     /**
@@ -317,6 +335,60 @@ class Table implements \ArrayAccess
         }
         $this->sortOrder = $order;
         return $this;
+    }
+
+    /**
+     * Set start param
+     * @param $start
+     * @return $this
+     */
+    public function _start($start)
+    {
+        if( !is_numeric($start) || $start < 0){
+            throw new \DomainException ("Start '$start' must be a positive integer");
+        }
+        $this->start = $start;
+        return $this;
+    }
+
+    /**
+     * Set end param
+     * @param $end
+     * @return $this
+     */
+    public function _end($end)
+    {
+        if( !is_numeric($end) || $end < 0){
+            throw new \DomainException ("end '$end'' must be a positive integer");
+        }
+        $this->end = $end;
+        return $this;
+    }
+
+    /**
+     * set limit param
+     * @param $limit
+     * @return $this
+     */
+    public function _limit($limit)
+    {
+        if( !is_numeric($limit) || $limit < 0){
+            throw new \DomainException ("limit '$limit'' must be a positive integer");
+        }
+        $this->limit = $limit;
+        return $this;
+    }
+
+    /**
+     * filter rows with fulltext search
+     * @param $q
+     * @return Table
+     */
+    public function _query($q)
+    {
+        return $this->filter(function ($item) use ($q) {
+            return $item->search($q) === true;
+        });
     }
 
     /**

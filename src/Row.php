@@ -96,4 +96,20 @@ class Row
         }
         return $this->fields;
     }
+
+    /**
+     * search substring in all row fields
+     * @param $q
+     * @return bool
+     */
+    public function search($q)
+    {
+        foreach($this->fields as $field){
+            if(strpos($field, $q) !== false){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

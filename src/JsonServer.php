@@ -39,6 +39,8 @@ class JsonServer
      */
     private $jsonDb;
 
+    private $response;
+
 
     /**
      * Create new JsonServer instance
@@ -46,6 +48,7 @@ class JsonServer
     public function __construct()
     {
         $this->jsonDb = new DataBase(__DIR__.Config::get('pathToDb'));
+        $this->response = new Response();
     }
 
     /**
@@ -91,10 +94,14 @@ class JsonServer
             $result = $this->processFilters($result);
         }
         if ($result) {
-            return $result->toArray();
-        } else {
-            return call_user_func(Config::get('resourceNotFound'));
+            $this->response->data = $result->toArray();
+//            return $result->toArray();
         }
+        else {
+            $this->response->data = call_user_func(Config::get('resourceNotFound'));
+//            return call_user_func(Config::get('resourceNotFound'));
+        }
+        return $this->response;
     }
 
     /**
@@ -110,7 +117,9 @@ class JsonServer
             $table = $this->jsonDb->$tabName;
             $row = $table->insert($this->data, $this->getParent($filter));
             $this->jsonDb->save();
-            return $row->toArray();
+            $this->response->data = $row->toArray();
+            return $this->response;
+            //            return $row->toArray();
         } else {
             throw new BadFunctionCallException("path $this->path must not contaign id");
         }
@@ -129,7 +138,9 @@ class JsonServer
             $table = $this->jsonDb->$tabName;
             $row = $table->update($id, $this->data);
             $this->jsonDb->save();
-            return $row->toArray();
+            $this->response->data = $row->toArray();
+            return $this->response;
+//            return $row->toArray();
         } else {
             throw new BadFunctionCallException("path $this->path must contaign id");
         }

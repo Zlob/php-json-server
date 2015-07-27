@@ -13,7 +13,7 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider requestProviderSingular
      */
-    public function testRequestSingularSingular ($method, $url, $data, $expected)
+    public function testRequestSingularSingular ($method, $url, $data, $expected, $msg)
     {
         $config = \JsonServer\Config::getInstance();
         $config->set('urlNamingForm', 'singularize');
@@ -21,13 +21,13 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
         $config->set('relationsNamingForm', 'singularize');
         $config->set('pathToDb', '/../tests/singularDB.json');
         $this->fixture = new \JsonServer\JsonServer();
-        $this->assertEquals($expected, $this->fixture->handleRequest($method, $url, $data));
+        $this->assertEquals($expected, $this->fixture->handleRequest($method, $url, $data)->data, $msg);
     }
 
     /**
      * @dataProvider requestProviderSingular
      */
-    public function testRequestSingularPlural ($method, $url, $data, $expected)
+    public function testRequestSingularPlural ($method, $url, $data, $expected, $msg)
     {
         $config = \JsonServer\Config::getInstance();
         $config->set('urlNamingForm', 'singularize');
@@ -35,7 +35,7 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
         $config->set('relationsNamingForm', 'singularize');
         $config->set('pathToDb', '/../tests/pluralDB.json');
         $this->fixture = new \JsonServer\JsonServer();
-        $this->assertEquals($expected, $this->fixture->handleRequest($method, $url,$data));
+        $this->assertEquals($expected, $this->fixture->handleRequest($method, $url,$data)->data, $msg);
     }
 
     public function requestProviderSingular()
@@ -60,7 +60,7 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
         $config->set('relationsNamingForm', 'singularize');
         $config->set('pathToDb', '/../tests/singularDB.json');
         $this->fixture = new \JsonServer\JsonServer();
-        $this->assertEquals($expected, $this->fixture->handleRequest($method, $url, $data), $msg);
+        $this->assertEquals($expected, $this->fixture->handleRequest($method, $url, $data)->data, $msg);
     }
 
     /**
@@ -74,7 +74,7 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
         $config->set('relationsNamingForm', 'singularize');
         $config->set('pathToDb', '/../tests/pluralDB.json');
         $this->fixture = new \JsonServer\JsonServer();
-        $this->assertEquals($expected, $this->fixture->handleRequest($method, $url, $data), $msg);
+        $this->assertEquals($expected, $this->fixture->handleRequest($method, $url, $data)->data, $msg);
     }
 
     public function requestProviderPlural()
