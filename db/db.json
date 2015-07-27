@@ -1,0 +1,58 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "newTitle",
+      "author": "vamakin2"
+    },
+    {
+      "id": 2,
+      "title": "json-server",
+      "author": "typicode"
+    },
+    {
+      "title": "hgh",
+      "author": "vamakin2",
+      "id": 3
+    },
+    {
+      "title": "newTitle",
+      "author": "vamakin2",
+      "id": 4
+    },
+    {
+      "title": "newTitle",
+      "author": "vamakin2",
+      "id": 5
+    },
+    {
+      "title": "newTitle",
+      "author": "vamakin2",
+      "id": 6
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "post_id": 1
+    }
+  ],
+  "votes": [
+    {
+      "id": 1,
+      "rating": 1,
+      "comment_id": 1
+    }
+  ],
+  "tmp": [
+    {
+      "data": "[\"22051\",\"22051\",\"22051\",\"22029\"]",
+      "id": 1
+    },
+    {
+      "data": "[\"22051\",\"22051\",\"22051\",\"22029\"]",
+      "id": 2
+    }
+  ]
+}

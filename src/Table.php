@@ -32,6 +32,19 @@ class Table implements \ArrayAccess
      */
     private $tabName;
 
+
+    /**
+     * sorting field
+     * @var string
+     */
+    private $sortField = 'id';
+
+    /**
+     * sorting order
+     * @var string
+     */
+    private $sortOrder = 'asc';
+
     /**
      * Create a new JsonTable instance
      *
@@ -46,7 +59,7 @@ class Table implements \ArrayAccess
                 if (is_array($row)) {
                     $this->rows[] = new Row($row, $this);
                 } elseif (get_class($row) === 'JsonServer\Row') {
-                    $this->rows[] = &$row;
+                    $this->rows[] = $row;
                 } else {
                     throw new \InvalidArgumentException('data should be array or object of JsonRow');
                 }
@@ -193,16 +206,17 @@ class Table implements \ArrayAccess
      */
     private function sort(&$result)
     {
-        $sortField = 'id'; //todo custom sorting
-        $sortFunc = function($a, $b) use ($sortField){
+        $sortField = $this->sortField;
+        $sortOrder = $this->sortOrder;
+        $sortFunc = function($a, $b) use ( $sortField, $sortOrder ){
             if ($a[$sortField] === $b[$sortField]){
                 return 0;
             }
             if ($a[$sortField] > $b[$sortField]){
-                return 1;
+                return $sortOrder === 'asc' ? 1 : -1;
             }
             if ($a[$sortField] < $b[$sortField]){
-                return -1;
+                return $sortOrder === 'asc' ? -1 : 1;
             }
         };
         usort ($result, $sortFunc);
@@ -277,6 +291,43 @@ class Table implements \ArrayAccess
         } else {
             return $noun . "_id";
         }
+    }
+
+    /**
+     * Set sorting field
+     * @param $field
+     * @return $this
+     */
+    public function _sort($field)
+    {
+        $this->sortField = $field;
+        return $this;
+    }
+
+
+    /**
+     * Set sorting order
+     * @param $order
+     * @return $this
+     */
+    public function _order($order)
+    {
+        if($order !== 'asc' && $order !== 'desc' ){
+            throw new \DomainException ("Unknown sort type $order");
+        }
+        $this->sortOrder = $order;
+        return $this;
+    }
+
+    /**
+     * Filter rows by $name field with $arguments[0] value
+     * @param $name
+     * @param $arguments
+     * @return Table
+     */
+    public function __call($name, $arguments)
+    {
+        return $this->where($name, $arguments[0]);
     }
 
 }

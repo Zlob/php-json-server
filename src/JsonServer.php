@@ -64,7 +64,7 @@ class JsonServer
      * @param $data
      * @return mixed
      */
-    public function handleRequest($method, $uri, $data)
+    public function handleRequest($method, $uri, $data = [])
     {
         $this->data = $data;
         $this->path = $uri;  //todo maybe throw exception if $uri === "" ??!
@@ -88,6 +88,7 @@ class JsonServer
             $result = $this->jsonDb->$tabName->find($id);
         } else {
             $result = $this->jsonDb->$tabName->filterByParent($parent);
+            $result = $this->processFilters($result);
         }
         if ($result) {
             return $result->toArray();
@@ -197,9 +198,27 @@ class JsonServer
         return $result;
     }
 
+    /**
+     * Get parent filter
+     * @param $filter
+     * @return mixed|null
+     */
     private function getParent($filter)
     {
         return count($filter) === 0 ? null : array_pop($filter);
+    }
+
+    /**
+     * Filter rows by input data
+     * @param $rows
+     * @return mixed
+     */
+    private function processFilters($rows)
+    {
+        foreach ($this->data as $key => $value) {
+            $rows = $rows->$key($value);
+        }
+        return $rows;
     }
 
 }

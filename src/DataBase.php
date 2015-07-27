@@ -27,7 +27,6 @@ class DataBase
      * Create instance of JsonDataBase
      *
      * @param $pathToFile
-     * @internal param $jsonString
      */
     public function __construct($pathToFile)
     {
