@@ -69,6 +69,46 @@ class JsonTableTest extends PHPUnit_Framework_TestCase
         self::assertEquals($this->fixture->toArray(), [['id' => 1, 'parent_id' => 2],['id' => 3, 'parent_id' => 2],['id' => 5, 'parent_id' => 6]], 'toArray is working');
     }
 
+    public function testSortDescIsOk()
+    {
+        $this->fixture->_sort('parent_id');
+        $this->fixture->_order('desc');
+        self::assertEquals($this->fixture->toArray(), [['id' => 5, 'parent_id' => 6],['id' => 1, 'parent_id' => 2],['id' => 3, 'parent_id' => 2]], 'sort desc is working');
+    }
+
+    public function testSortAscIsOk()
+    {
+        $this->fixture->_sort('parent_id');
+        $this->fixture->_order('asc');
+        self::assertEquals($this->fixture->toArray(), [['id' => 3, 'parent_id' => 2],['id' => 1, 'parent_id' => 2],['id' => 5, 'parent_id' => 6]], 'sort asc is working');
+    }
+
+    public function testLimitIsOk()
+    {
+        $this->fixture->_limit(2);
+        self::assertEquals($this->fixture->toArray(), [['id' => 1, 'parent_id' => 2],['id' => 3, 'parent_id' => 2]], 'limit is working');
+    }
+
+    public function testStartIsOk()
+    {
+        $this->fixture->_start(1);
+        self::assertEquals($this->fixture->toArray(), [['id' => 3, 'parent_id' => 2],['id' => 5, 'parent_id' => 6]], 'start is working');
+    }
+
+    public function testEndIsOk()
+    {
+        $this->fixture->_end(1);
+        self::assertEquals($this->fixture->toArray(), [['id' => 1, 'parent_id' => 2]], 'end is working');
+    }
+
+    public function testFulltextIsOk()
+    {
+        $this->fixture = new \JsonServer\Table([['id' => 3, 'field' => 'some string'],['id' => 1, 'field' => 'field with substring'],['id' => 5, 'field' => 'another string']], "");
+        $this->fixture = $this->fixture->_query('substring');
+        self::assertEquals($this->fixture->toArray(), [['id' => 1, 'field' => 'field with substring']], 'fulltext end is working');
+    }
+
+
     public function testInsertIsOk()
     {
         $before = $this->fixture->count();

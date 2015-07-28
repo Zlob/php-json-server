@@ -23,6 +23,9 @@ class Row
      */
     private $table;
 
+    private $embeddedResources = [];
+
+
     /**
      * Create new row instance
      *
@@ -94,7 +97,11 @@ class Row
         if (Config::get('fieldsAutoSorting')){
             uksort ($this->fields, Config::get('fieldsAutoSortingFunc'));
         }
-        return $this->fields;
+        $result = $this->fields;
+        foreach($this->embeddedResources as $resName=>$resource){
+            $result[$resName] = $resource->toArray();
+        }
+        return $result;
     }
 
     /**
@@ -110,6 +117,14 @@ class Row
             }
         }
         return false;
+    }
+
+    public function embedResources($resources)
+    {
+        foreach($resources as $resource){
+            $tabName = $this->table->getTabName();
+            $this->embeddedResources[$resource] = $this->table->getDb()->$resource->filterByParent(['table' => $tabName, 'id' => $this->id]);
+        }
     }
 
 }

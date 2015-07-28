@@ -44,11 +44,29 @@ class Table implements \ArrayAccess
      */
     private $sortOrder = 'asc';
 
+    /**
+     * start position
+     * @var null
+     */
     private $start = null;
 
+    /**
+     *  end position
+     * @var null
+     */
     private $end = null;
 
+    /**
+     *  result limit
+     * @var null
+     */
     private $limit = null;
+
+    /**
+     *  embed resources
+     * @var array
+     */
+    private $embeds = [];
 
     /**
      * Create a new JsonTable instance
@@ -199,6 +217,7 @@ class Table implements \ArrayAccess
     {
         $this->sort();
         $this->limits();
+        $this->embedResources();
         $result = [];
         foreach ($this->rows as $row) {
             $result[] = $row->toArray();
@@ -236,6 +255,13 @@ class Table implements \ArrayAccess
             }
         };
         usort ($this->rows, $sortFunc);
+    }
+
+    private function embedResources()
+    {
+        foreach($this->rows as $row){
+            $row->embedResources($this->embeds);
+        }
     }
 
     /**
@@ -392,6 +418,15 @@ class Table implements \ArrayAccess
     }
 
     /**
+     * @param $embedStr
+     */
+    public function _embed($embedStr)
+    {
+        $this->embeds = explode(',', $embedStr);
+        return $this;
+    }
+
+    /**
      * Filter rows by $name field with $arguments[0] value
      * @param $name
      * @param $arguments
@@ -400,6 +435,22 @@ class Table implements \ArrayAccess
     public function __call($name, $arguments)
     {
         return $this->where($name, $arguments[0]);
+    }
+
+    /**
+     * @return null
+     */
+    public function getDb()
+    {
+        return $this->db;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTabName()
+    {
+        return $this->tabName;
     }
 
 }
