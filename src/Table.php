@@ -356,6 +356,7 @@ class Table implements \ArrayAccess
      */
     public function _order($order)
     {
+        $order = mb_strtolower($order);
         if($order !== 'asc' && $order !== 'desc' ){
             throw new \DomainException ("Unknown sort type $order");
         }
