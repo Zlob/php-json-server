@@ -85,5 +85,38 @@ PUT    /posts/1
 PATCH  /posts/1
 DELETE /posts/1
 ```
+
+To filter resources
+
+```
+GET /posts?title=json-server&author=zlob
+```
+
+To slice resources, add `_start` and `_end` or `_limit`.
+
+```
+GET /posts?_start=20&_end=30
+GET /posts/1/comments?_start=0&_end=30
+```
+
+To sort resources, add `_sort` and `_order` (ascending order by default).
+
+```
+GET /posts?_sort=views&_order=desc
+GET /posts/1/comments?_sort=votes&_order=asc
+```
+
+To make a full-text search on resources, add `_query`.
+
+```
+GET /posts?_query=internet
+```
+
+To embed other resources, add `_embed`(separate by ',' for more then one resources).
+
+```
+GET /posts/1?_embed=comments
+GET /posts/1?_embed=comments,tags
+```
 ##License
 MIT - [Zlob](https://github.com/zlob)
