@@ -90,7 +90,7 @@ class JsonServer
         //fetching single resource
         if ($id) {
             try {
-                $result = $this->jsonDb->$tabName->find($id);
+                $result = $this->processFilters($this->jsonDb->$tabName)->find($id);
                 $this->response->data = $result->toArray();
                 $this->response->status = 200;
             } catch (\OutOfRangeException $e) {

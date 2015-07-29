@@ -214,7 +214,6 @@ class Table implements \ArrayAccess
     {
         $this->sort();
         $this->limits();
-        $this->embedResources();
         $result = [];
         foreach ($this->rows as $row) {
             $result[] = $row->toArray();
@@ -247,6 +246,15 @@ class Table implements \ArrayAccess
     {
         return $this->tabName;
     }
+
+    /**
+     * @return array
+     */
+    public function getEmbeds()
+    {
+        return $this->embeds;
+    }
+
 
     /**
      * @param mixed $offset
@@ -413,16 +421,6 @@ class Table implements \ArrayAccess
             }
         };
         usort ($this->rows, $sortFunc);
-    }
-
-    /**
-     * Embed resource with related resorces
-     */
-    private function embedResources()
-    {
-        foreach($this->rows as $row){
-            $row->embedResources($this->embeds);
-        }
     }
 
     /**

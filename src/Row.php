@@ -97,6 +97,9 @@ class Row
         if (Config::get('fieldsAutoSorting')){
             uksort ($this->fields, Config::get('fieldsAutoSortingFunc'));
         }
+        if($this->table){
+            $this->embedResources($this->table->getEmbeds());
+        }
         $result = $this->fields;
         foreach($this->embeddedResources as $resName=>$resource){
             $result[$resName] = $resource->toArray();
