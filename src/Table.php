@@ -3,6 +3,7 @@
 namespace JsonServer;
 
 use Doctrine\Common\Inflector;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class JsonTable
@@ -220,6 +221,11 @@ class Table implements \ArrayAccess
         }
         return $result;
 
+    }
+
+    public function getContent()
+    {
+        return json_encode($this->toArray());
     }
 
     /**

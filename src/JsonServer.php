@@ -4,6 +4,7 @@ namespace JsonServer;
 
 use BadFunctionCallException;
 use Doctrine\Common\Inflector;
+use Symfony\Component\HttpFoundation\Response as Response;
 
 /**
  * Class JsonServer
@@ -48,7 +49,8 @@ class JsonServer
     public function __construct()
     {
         $this->jsonDb = new DataBase(__DIR__ . Config::get('pathToDb'));
-        $this->response = new JsonServerResponse();
+        $this->response = new Response();
+        $this->response->headers->set('Content-Type', 'application/vnd.api+json');
     }
 
     /**
@@ -91,8 +93,8 @@ class JsonServer
         if ($id) {
             try {
                 $result = $this->processFilters($this->jsonDb->$tabName)->find($id);
-                $this->response->data = $result->toArray();
-                $this->response->status = 200;
+                $this->response->setContent($result->getContent());
+                $this->response->setStatusCode(200);
             } catch (\OutOfRangeException $e) {
                 $this->response = call_user_func(Config::get('resourceNotFound'), $this->response);
             }
@@ -100,8 +102,9 @@ class JsonServer
         else {
             $result = $this->jsonDb->$tabName->filterByParent($parent);
             $result = $this->processFilters($result);
-            $this->response->data = $result->toArray();
-            $this->response->status = 200;
+            $this->response->setContent($result->getContent());
+            $this->response->headers->set('X-Total-Count', $result->count());
+            $this->response->setStatusCode(200);
         }
         return $this->response;
     }
@@ -119,8 +122,8 @@ class JsonServer
             $table = $this->jsonDb->$tabName;
             $row = $table->insert($this->data, $this->getParent($filter));
             $this->jsonDb->save();
-            $this->response->data = $row->toArray();
-            $this->response->status = 201;
+            $this->response->setContent($row->getContent());
+            $this->response->setStatusCode(201);
             return $this->response;
         } else {
             throw new BadFunctionCallException("path $this->path must not contaign id");
@@ -141,12 +144,13 @@ class JsonServer
             try {
                 $row = $table->update($id, $this->data);
                 $this->jsonDb->save();
-                $this->response->data = $row->toArray();
-                $this->response->status = 200;
+                $this->response->setContent($row->getContent());
+                $this->response->setStatusCode(200);
                 return $this->response;
             } catch (\OutOfRangeException $e) {
-                $this->response->data = null;
-                $this->response->status = 404 ;
+                $this->response->setContent('');
+                $this->response->setStatusCode(404);
+                return $this->response;
             }
 
         } else {
@@ -176,11 +180,12 @@ class JsonServer
             try{
                 $table->delete($id, $this->data);
                 $this->jsonDb->save();
-                $this->response->data = null;
-                $this->response->status = 204;
+                $this->response->setContent('');
+                $this->response->setStatusCode(204);
             } catch (\OutOfRangeException $e) {
-                $this->response->data = null;
-                $this->response->status = 403;
+                $this->response->setContent('');
+                $this->response->setStatusCode(404);
+                return $this->response;
             }
 
         } else {

@@ -107,6 +107,11 @@ class Row
         return $result;
     }
 
+    public function getContent()
+    {
+        return json_encode($this->toArray());
+    }
+
     /**
      * search substring in all row fields
      * @param $q

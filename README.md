@@ -41,9 +41,10 @@ class JsonServerController extends Controller
         $data = Request::all();                                             //request data
         $method = Request::method();                                        //request method
         $jsonServer = new JsonServer();                                     //create new JsonServer instance
-        $jsResponse = $jsonServer->handleRequest($method, $uri, $data);     //handle request
-                                                                            //set retrieved data and http status
-        return Response::make($jsResponse->data, $jsResponse->status);      //into Laravel Response object
+        $response = $jsonServer->handleRequest($method, $uri, $data);       //handle request
+                                                                            //return Symfony\Component\HttpFoundation\Response
+                                                                            //object with content, status and headers
+        $response->send();                                                  //send response
     }
 }
 ```
