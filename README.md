@@ -30,6 +30,7 @@ You can use this library with any php web framework. Here is example how to inte
 namespace App\Http\Controllers;
 
 use Request;
+use Response;
 use Config;
 use JsonServer\JsonServer;
 
@@ -37,10 +38,12 @@ class JsonServerController extends Controller
 {
     public function handleRequest($uri)
     {
-        $data = Request::all();                                   //request data
-        $method = Request::method();                              //request method
-        $jsonServer = new JsonServer();                           //create new JsonServer instance
-        return $jsonServer->handleRequest($method, $uri, $data);  //handle request
+        $data = Request::all();                                             //request data
+        $method = Request::method();                                        //request method
+        $jsonServer = new JsonServer();                                     //create new JsonServer instance
+        $jsResponse = $jsonServer->handleRequest($method, $uri, $data);     //handle request
+                                                                            //set retrieved data and http status
+        return Response::make($jsResponse->data, $jsResponse->status);      //into Laravel Response object
     }
 }
 ```
