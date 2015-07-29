@@ -121,9 +121,11 @@ return [
     |
     */
 
-    'resourceNotFound' =>  function ()
+    'resourceNotFound' =>  function ($response)
     {
-        return null;
+        $response->data = null;
+        $response->status = 200;
+        return $response;
     },
 
 

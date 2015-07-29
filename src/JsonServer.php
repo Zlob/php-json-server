@@ -47,8 +47,8 @@ class JsonServer
      */
     public function __construct()
     {
-        $this->jsonDb = new DataBase(__DIR__.Config::get('pathToDb'));
-        $this->response = new Response();
+        $this->jsonDb = new DataBase(__DIR__ . Config::get('pathToDb'));
+        $this->response = new JsonServerResponse();
     }
 
     /**
@@ -70,7 +70,7 @@ class JsonServer
     public function handleRequest($method, $uri, $data = [])
     {
         $this->data = $data;
-        $this->path = $uri;  //todo maybe throw exception if $uri === "" ??!
+        $this->path = $uri;
         $this->params = explode('/', $uri);
         return $this->$method();
     }
@@ -87,19 +87,21 @@ class JsonServer
         $parent = count($filter) > 0 ? array_pop($filter) : null;
         $tabName = $this->prepareForm($last['table']);
         $id = $last['id'];
+        //fetching single resource
         if ($id) {
-            $result = $this->jsonDb->$tabName->find($id);
-        } else {
+            try {
+                $result = $this->jsonDb->$tabName->find($id);
+                $this->response->data = $result->toArray();
+                $this->response->status = 200;
+            } catch (\OutOfRangeException $e) {
+                $this->response = call_user_func(Config::get('resourceNotFound'), $this->response);
+            }
+        } //fetching resource collection
+        else {
             $result = $this->jsonDb->$tabName->filterByParent($parent);
             $result = $this->processFilters($result);
-        }
-        if ($result) {
             $this->response->data = $result->toArray();
-//            return $result->toArray();
-        }
-        else {
-            $this->response->data = call_user_func(Config::get('resourceNotFound'));
-//            return call_user_func(Config::get('resourceNotFound'));
+            $this->response->status = 200;
         }
         return $this->response;
     }
@@ -118,8 +120,8 @@ class JsonServer
             $row = $table->insert($this->data, $this->getParent($filter));
             $this->jsonDb->save();
             $this->response->data = $row->toArray();
+            $this->response->status = 201;
             return $this->response;
-            //            return $row->toArray();
         } else {
             throw new BadFunctionCallException("path $this->path must not contaign id");
         }
@@ -136,11 +138,17 @@ class JsonServer
         $id = $last['id'];
         if ($id) {
             $table = $this->jsonDb->$tabName;
-            $row = $table->update($id, $this->data);
-            $this->jsonDb->save();
-            $this->response->data = $row->toArray();
-            return $this->response;
-//            return $row->toArray();
+            try {
+                $row = $table->update($id, $this->data);
+                $this->jsonDb->save();
+                $this->response->data = $row->toArray();
+                $this->response->status = 200;
+                return $this->response;
+            } catch (\OutOfRangeException $e) {
+                $this->response->data = null;
+                $this->response->status = 404 ;
+            }
+
         } else {
             throw new BadFunctionCallException("path $this->path must contaign id");
         }
@@ -165,8 +173,16 @@ class JsonServer
         $id = $last['id'];
         if ($id) {
             $table = $this->jsonDb->$tabName;
-            $table->delete($id, $this->data);
-            $this->jsonDb->save();
+            try{
+                $table->delete($id, $this->data);
+                $this->jsonDb->save();
+                $this->response->data = null;
+                $this->response->status = 204;
+            } catch (\OutOfRangeException $e) {
+                $this->response->data = null;
+                $this->response->status = 403;
+            }
+
         } else {
             throw new BadFunctionCallException("path $this->path must contaign id");
         }

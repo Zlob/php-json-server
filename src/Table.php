@@ -120,7 +120,7 @@ class Table implements \ArrayAccess
         if (count($result->rows) > 0) {
             return $result[0];
         } else {
-            return null;
+            throw new \OutOfRangeException("there is no resource with id $id");
         }
     }
 
@@ -165,9 +165,6 @@ class Table implements \ArrayAccess
     public function update($id, $data)
     {
         $row = $this->find($id);
-        if(!$row){
-            throw new \OutOfRangeException("there is no resource with id $id");
-        }
         $row->setData($data);
         return $row;
     }
@@ -227,50 +224,28 @@ class Table implements \ArrayAccess
     }
 
     /**
-     *limit result
-     */
-    private function limits()
-    {
-        $offset = $this->start ?: 0;
-        $length = max($this->end ? $this->end - $offset : null, $this->limit);
-        $this->rows = array_slice($this->rows, $offset, $length);
-    }
-
-    /**
-     * Sort rows in table
-     */
-    private function sort()
-    {
-        $sortField = $this->sortField;
-        $sortOrder = $this->sortOrder;
-        $sortFunc = function($a, $b) use ( $sortField, $sortOrder ){
-            if ($a->$sortField === $b->$sortField){
-                return 0;
-            }
-            if ($a->$sortField > $b->$sortField){
-                return $sortOrder === 'asc' ? 1 : -1;
-            }
-            if ($a->$sortField < $b->$sortField){
-                return $sortOrder === 'asc' ? -1 : 1;
-            }
-        };
-        usort ($this->rows, $sortFunc);
-    }
-
-    private function embedResources()
-    {
-        foreach($this->rows as $row){
-            $row->embedResources($this->embeds);
-        }
-    }
-
-    /**
      * Return count of rows in table
      * @return int
      */
     public function count()
     {
         return count($this->rows);
+    }
+
+    /**
+     * @return null
+     */
+    public function getDb()
+    {
+        return $this->db;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTabName()
+    {
+        return $this->tabName;
     }
 
     /**
@@ -306,35 +281,6 @@ class Table implements \ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->rows[$offset]);
-    }
-
-    /**
-     * Filter rows with callback function
-     *
-     * @param $callback
-     * @return static
-     */
-    private function filter($callback)
-    {
-        $table = clone $this;
-        $table->rows = array_slice(array_filter($this->rows, $callback),0);
-        return $table;
-    }
-
-    /**
-     * Return parent relation field in right form
-     *
-     * @param $noun
-     * @return string
-     */
-    private function getParentKeyName($noun)
-    {
-        if (!(Config::get('urlNamingForm') === Config::get('relationsNamingForm'))) {
-            $method = Config::get('relationsNamingForm');
-            return Inflector\Inflector::$method($noun) . "_id";
-        } else {
-            return $noun . "_id";
-        }
     }
 
     /**
@@ -439,19 +385,74 @@ class Table implements \ArrayAccess
     }
 
     /**
-     * @return null
+     *limit result
      */
-    public function getDb()
+    private function limits()
     {
-        return $this->db;
+        $offset = $this->start ?: 0;
+        $length = max($this->end ? $this->end - $offset : null, $this->limit);
+        $this->rows = array_slice($this->rows, $offset, $length);
     }
 
     /**
-     * @return mixed
+     * Sort rows in table
      */
-    public function getTabName()
+    private function sort()
     {
-        return $this->tabName;
+        $sortField = $this->sortField;
+        $sortOrder = $this->sortOrder;
+        $sortFunc = function($a, $b) use ( $sortField, $sortOrder ){
+            if ($a->$sortField === $b->$sortField){
+                return 0;
+            }
+            if ($a->$sortField > $b->$sortField){
+                return $sortOrder === 'asc' ? 1 : -1;
+            }
+            if ($a->$sortField < $b->$sortField){
+                return $sortOrder === 'asc' ? -1 : 1;
+            }
+        };
+        usort ($this->rows, $sortFunc);
     }
+
+    /**
+     * Embed resource with related resorces
+     */
+    private function embedResources()
+    {
+        foreach($this->rows as $row){
+            $row->embedResources($this->embeds);
+        }
+    }
+
+    /**
+     * Filter rows with callback function
+     *
+     * @param $callback
+     * @return static
+     */
+    private function filter($callback)
+    {
+        $table = clone $this;
+        $table->rows = array_slice(array_filter($this->rows, $callback),0);
+        return $table;
+    }
+
+    /**
+     * Return parent relation field in right form
+     *
+     * @param $noun
+     * @return string
+     */
+    private function getParentKeyName($noun)
+    {
+        if (!(Config::get('urlNamingForm') === Config::get('relationsNamingForm'))) {
+            $method = Config::get('relationsNamingForm');
+            return Inflector\Inflector::$method($noun) . "_id";
+        } else {
+            return $noun . "_id";
+        }
+    }
+
 
 }

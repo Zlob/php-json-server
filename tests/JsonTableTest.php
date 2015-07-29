@@ -49,9 +49,13 @@ class JsonTableTest extends PHPUnit_Framework_TestCase
         self::assertEquals(get_class($this->fixture->find(1)), 'JsonServer\Row', 'find with right id is working');
     }
 
+    /**
+     * @expectedException        OutOfRangeException
+     * @expectedExceptionMessage there is no resource with id 777
+     */
     public function testFindNotExist()
     {
-        self::assertEquals($this->fixture->find(777), null, 'find with wrong id is working');
+        $this->fixture->find(777);
     }
 
     public function testFilterByParentOk()
@@ -125,11 +129,14 @@ class JsonTableTest extends PHPUnit_Framework_TestCase
         self::assertNotEquals($oldVal, $newVal, 'update is working');
     }
 
+    /**
+     * @expectedException        OutOfRangeException
+     * @expectedExceptionMessage there is no resource with id 1
+     */
     public function testDeleteIsOk()
     {
         $this->fixture->delete(1);
-        $newVal = $this->fixture->find(1);
-        self::assertEquals($newVal, null, 'delete is working');
+        $this->fixture->find(1);
     }
 
 }
