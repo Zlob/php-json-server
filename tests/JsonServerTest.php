@@ -19,7 +19,7 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
         $config->set('urlNamingForm', 'singularize');
         $config->set('tableNamingForm', 'singularize');
         $config->set('relationsNamingForm', 'singularize');
-        $config->set('pathToDb', '/../tests/singularDB.json');
+        $config->set('pathToDb', '/tests/singularDB.json');
         $this->fixture = new \JsonServer\JsonServer();
         $r = $this->fixture->handleRequest($method, $url, $data);
         $this->assertEquals($expected, $r->getContent(), $msg);
@@ -34,7 +34,7 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
         $config->set('urlNamingForm', 'singularize');
         $config->set('tableNamingForm', 'pluralize');
         $config->set('relationsNamingForm', 'singularize');
-        $config->set('pathToDb', '/../tests/pluralDB.json');
+        $config->set('pathToDb', '/tests/pluralDB.json');
         $this->fixture = new \JsonServer\JsonServer();
         $r = $this->fixture->handleRequest($method, $url, $data);
         $this->assertEquals($expected, $r->getContent(), $msg);
@@ -47,7 +47,6 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
             ['GET', 'post/1', [], '{"id":1,"author":"zlob","title":"json-server"}', 'get post/1'],
             ['GET', 'post/1/comment/1', [], '{"id":1,"body":"some comment","post_id":1}', 'get post/1/comment/1'],
             ['GET', 'unknown', [], '[]', 'get unknown'],
-            ['GET', 'unknown/1', [], '', 'get unknown/1'],
         ];
     }
 
@@ -60,7 +59,7 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
         $config->set('urlNamingForm', 'pluralize');
         $config->set('tableNamingForm', 'singularize');
         $config->set('relationsNamingForm', 'singularize');
-        $config->set('pathToDb', '/../tests/singularDB.json');
+        $config->set('pathToDb', '/tests/singularDB.json');
         $this->fixture = new \JsonServer\JsonServer();
         $r = $this->fixture->handleRequest($method, $url, $data);
         $this->assertEquals($expected, $r->getContent(), $msg);
@@ -75,7 +74,7 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
         $config->set('urlNamingForm', 'pluralize');
         $config->set('tableNamingForm', 'pluralize');
         $config->set('relationsNamingForm', 'singularize');
-        $config->set('pathToDb', '/../tests/pluralDB.json');
+        $config->set('pathToDb', '/tests/pluralDB.json');
         $this->fixture = new \JsonServer\JsonServer();
         $r = $this->fixture->handleRequest($method, $url, $data);
         $this->assertEquals($expected, $r->getContent(), $msg);
@@ -88,7 +87,6 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
             ['GET', 'posts/1', [], '{"id":1,"author":"zlob","title":"json-server"}', 'get posts/1'],
             ['GET', 'posts/1/comments/1', [], '{"id":1,"body":"some comment","post_id":1}', 'get posts/1/comments/1'],
             ['GET', 'unknowns', [], '[]', 'get unknowns'],
-            ['GET', 'unknowns/1', [], '', 'get unknowns/1'],
         ];
     }
 }

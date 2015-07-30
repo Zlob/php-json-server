@@ -58,11 +58,6 @@ class JsonTableTest extends PHPUnit_Framework_TestCase
         $this->fixture->find(777);
     }
 
-    public function testFilterByParentOk()
-    {
-        self::assertEquals(get_class($this->fixture->filterByParent(['table' => 'parents', 'id' => 2])), 'JsonServer\Table', 'filter by parent is working');
-    }
-
     public function testGetNewIdIsOk()
     {
         self::assertEquals($this->fixture->getNewId(), 6, 'get new id is working');

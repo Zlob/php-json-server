@@ -48,7 +48,7 @@ class JsonServer
      */
     public function __construct()
     {
-        $this->jsonDb = new DataBase(__DIR__ . Config::get('pathToDb'));
+        $this->jsonDb = new DataBase(__DIR__ .'/..'. Config::get('pathToDb'));
         $this->response = new Response();
         $this->response->headers->set('Content-Type', 'application/vnd.api+json');
     }
@@ -71,10 +71,13 @@ class JsonServer
      */
     public function handleRequest($method, $uri, $data = [])
     {
-        $this->data = $data;
-        $this->path = $uri;
-        $this->params = explode('/', $uri);
-        return $this->$method();
+        $params = explode('/', $uri);
+        $filter = $this->getFilters($params);
+        $last = array_pop($filter);
+        $tabName = $last['table'];
+        $id = $last['id'];
+        $parent = $this->getParent($filter);
+        return $this->$method($tabName, $id, $parent, $data);
     }
 
     /**
@@ -82,29 +85,25 @@ class JsonServer
      *
      * @return mixed
      */
-    public function GET()
+    public function GET($tabName, $id, $parent, $data)
     {
-        $filter = $this->getFilters($this->params);
-        $last = array_pop($filter);
-        $parent = count($filter) > 0 ? array_pop($filter) : null;
-        $tabName = $this->prepareForm($last['table']);
-        $id = $last['id'];
-        //fetching single resource
-        if ($id) {
-            try {
-                $result = $this->processFilters($this->jsonDb->$tabName)->find($id);
-                $this->response->setContent($result->getContent());
-                $this->response->setStatusCode(200);
-            } catch (\OutOfRangeException $e) {
-                $this->response = call_user_func(Config::get('resourceNotFound'), $this->response);
-            }
-        } //fetching resource collection
-        else {
+        try{
             $result = $this->jsonDb->$tabName->filterByParent($parent);
             $result = $this->processFilters($result);
-            $this->response->setContent($result->getContent());
-            $this->response->headers->set('X-Total-Count', $result->count());
-            $this->response->setStatusCode(200);
+            //fetching single resource
+            if ($id) {
+                $result = $result->find($id);
+                $this->response->setContent($result->getContent());
+                $this->response->setStatusCode(200);
+            } //fetching resource collection
+            else {
+                $this->response->setContent($result->getContent());
+                $this->response->headers->set('X-Total-Count', $result->count());
+                $this->response->setStatusCode(200);
+            }
+        }
+        catch(\OutOfRangeException $e){
+            return call_user_func(Config::get('resourceNotFound'), $this->response);
         }
         return $this->response;
     }
@@ -112,37 +111,29 @@ class JsonServer
     /**
      * Handle POST request - create new resource
      */
-    public function POST()
+    public function POST($tabName, $id, $parent, $data)
     {
-        $filter = $this->getFilters($this->params);
-        $last = array_pop($filter);
-        $tabName = $this->prepareForm($last['table']);
-        $id = $last['id'];
         if (!$id) {
             $table = $this->jsonDb->$tabName;
-            $row = $table->insert($this->data, $this->getParent($filter));
+            $row = $table->insert($data, $parent);
             $this->jsonDb->save();
             $this->response->setContent($row->getContent());
             $this->response->setStatusCode(201);
             return $this->response;
         } else {
-            throw new BadFunctionCallException("path $this->path must not contaign id");
+            throw new BadFunctionCallException('path must not contaign id');
         }
     }
 
     /**
      * Handle PATCH request - update part of existing resource
      */
-    public function PATCH()
+    public function PATCH($tabName, $id, $parent, $data)
     {
-        $filter = $this->getFilters($this->params);
-        $last = array_pop($filter);
-        $tabName = $this->prepareForm($last['table']);
-        $id = $last['id'];
         if ($id) {
             $table = $this->jsonDb->$tabName;
             try {
-                $row = $table->update($id, $this->data);
+                $row = $table->update($id, $data);
                 $this->jsonDb->save();
                 $this->response->setContent($row->getContent());
                 $this->response->setStatusCode(200);
@@ -154,31 +145,27 @@ class JsonServer
             }
 
         } else {
-            throw new BadFunctionCallException("path $this->path must contaign id");
+            throw new BadFunctionCallException('path must contaign id');
         }
     }
 
     /**
      * Handle PUT request - update existing resource. behavior same to PATCH
      */
-    public function PUT()
+    public function PUT($tabName, $id, $parent, $data)
     {
-        return $this->PATCH();
+        return $this->PATCH($tabName, $id, $parent, $data);
     }
 
     /**
      * Handle DELETE request - delete resource
      */
-    public function DELETE()
+    public function DELETE($tabName, $id, $parent, $data)
     {
-        $filter = $this->getFilters($this->params);
-        $last = array_pop($filter);
-        $tabName = $this->prepareForm($last['table']);
-        $id = $last['id'];
         if ($id) {
             $table = $this->jsonDb->$tabName;
             try{
-                $table->delete($id, $this->data);
+                $table->delete($id);
                 $this->jsonDb->save();
                 $this->response->setContent('');
                 $this->response->setStatusCode(204);
@@ -189,7 +176,7 @@ class JsonServer
             }
 
         } else {
-            throw new BadFunctionCallException("path $this->path must contaign id");
+            throw new BadFunctionCallException('path must contaign id');
         }
     }
 
@@ -222,7 +209,7 @@ class JsonServer
             $tab = array_key_exists($i, $uri) ? $uri[$i] : null;
             if ($tab) {
                 $elem = [];
-                $elem['table'] = $tab;
+                $elem['table'] = $this->prepareForm($tab);
                 $elem['id'] = array_key_exists($i + 1, $uri) ? $uri[$i + 1] : null;
                 $result[] = $elem;
             }

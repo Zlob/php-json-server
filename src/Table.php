@@ -134,6 +134,7 @@ class Table implements \ArrayAccess
     public function filterByParent($parent)
     {
         if ($parent) {
+            $this->db->$parent['table']->find($parent['id']);
             return $this->where($this->getParentKeyName($parent['table']), $parent['id']);
         }
         return $this;
@@ -450,12 +451,12 @@ class Table implements \ArrayAccess
      */
     private function getParentKeyName($noun)
     {
-        if (!(Config::get('urlNamingForm') === Config::get('relationsNamingForm'))) {
+//        if (!(Config::get('urlNamingForm') === Config::get('relationsNamingForm'))) {
             $method = Config::get('relationsNamingForm');
             return Inflector\Inflector::$method($noun) . "_id";
-        } else {
-            return $noun . "_id";
-        }
+//        } else {
+//            return $noun . "_id";
+//        }
     }
 
 
