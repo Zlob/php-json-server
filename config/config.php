@@ -64,7 +64,7 @@ return [
     |
     */
 
-    'pathToDb' => '/../db/db.json',
+    'pathToDb' => '/db/db.json',
 
     /*
     |--------------------------------------------------------------------------
@@ -123,8 +123,8 @@ return [
 
     'resourceNotFound' =>  function ($response)
     {
-        $response->data = null;
-        $response->status = 200;
+        $response->setContent('');
+        $response->setStatusCode(404);
         return $response;
     },
 
