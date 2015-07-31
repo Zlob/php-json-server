@@ -96,7 +96,7 @@ To filter resources
 GET /posts?title=json-server&author=zlob
 ```
 
-To slice resources, add `_start` and `_end` or `_limit`.
+To slice resources, add `_start` and `_end` or `_limit`(an X-Total-Count header is included in the response).
 
 ```
 GET /posts?_start=20&_end=30
@@ -122,5 +122,16 @@ To embed other resources, add `_embed`(separate by ',' for more then one resourc
 GET /posts/1?_embed=comments
 GET /posts/1?_embed=comments,tags
 ```
+
+##CLI: Generate random data
+You can fill database with fake data in one command.
+In example, to create table posts, with 50 resources, that contains fields title, date, author and content,
+in jsonServer directory use command:
+```
+php-json-server faker posts 'title.text date.date author.name content.text.10' --num=50
+```
+Where where fields separated by space, and field name, field type and additional parameter separated by '.'
+Field type and parameters described in [faker](https://github.com/fzaninotto/Faker), that used inside.
+
 ##License
 MIT - [Zlob](https://github.com/zlob)
