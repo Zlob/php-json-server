@@ -19,7 +19,7 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
         $config->set('urlNamingForm', 'singularize');
         $config->set('tableNamingForm', 'singularize');
         $config->set('relationsNamingForm', 'singularize');
-        $config->set('pathToDb', '/tests/singularDB.json');
+        $config->set('pathToDb', '/tests/Mock/singularDB.json');
         $this->fixture = new \JsonServer\JsonServer();
         $r = $this->fixture->handleRequest($method, $url, $data);
         $this->assertEquals($expected, $r->getContent(), $msg);
@@ -34,7 +34,7 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
         $config->set('urlNamingForm', 'singularize');
         $config->set('tableNamingForm', 'pluralize');
         $config->set('relationsNamingForm', 'singularize');
-        $config->set('pathToDb', '/tests/pluralDB.json');
+        $config->set('pathToDb', '/tests/Mock/pluralDB.json');
         $this->fixture = new \JsonServer\JsonServer();
         $r = $this->fixture->handleRequest($method, $url, $data);
         $this->assertEquals($expected, $r->getContent(), $msg);
@@ -59,7 +59,7 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
         $config->set('urlNamingForm', 'pluralize');
         $config->set('tableNamingForm', 'singularize');
         $config->set('relationsNamingForm', 'singularize');
-        $config->set('pathToDb', '/tests/singularDB.json');
+        $config->set('pathToDb', '/tests/Mock/singularDB.json');
         $this->fixture = new \JsonServer\JsonServer();
         $r = $this->fixture->handleRequest($method, $url, $data);
         $this->assertEquals($expected, $r->getContent(), $msg);
@@ -74,7 +74,7 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
         $config->set('urlNamingForm', 'pluralize');
         $config->set('tableNamingForm', 'pluralize');
         $config->set('relationsNamingForm', 'singularize');
-        $config->set('pathToDb', '/tests/pluralDB.json');
+        $config->set('pathToDb', '/tests/Mock/pluralDB.json');
         $this->fixture = new \JsonServer\JsonServer();
         $r = $this->fixture->handleRequest($method, $url, $data);
         $this->assertEquals($expected, $r->getContent(), $msg);

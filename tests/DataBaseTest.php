@@ -1,13 +1,13 @@
 <?php
 
 
-class JsonDataBaseTest extends PHPUnit_Framework_TestCase
+class DataBaseTest extends PHPUnit_Framework_TestCase
 {
     protected $fixture;
 
     protected function setUp()
     {
-        $this->fixture = new \JsonServer\DataBase(getcwd().'/tests/pluralDB.json');
+        $this->fixture = new \JsonServer\DataBase(getcwd().'/tests/Mock/pluralDB.json');
     }
 
     protected function tearDown()
