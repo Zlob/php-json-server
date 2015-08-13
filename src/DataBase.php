@@ -69,7 +69,7 @@ class DataBase
         foreach ($this->tables as $tabName => $table) {
             $result[$tabName] = $table->toArray();
         }
-        
+
         ftruncate($this->dbFile, 0);
         rewind($this->dbFile);
         fwrite($this->dbFile, json_encode($result, JSON_PRETTY_PRINT));

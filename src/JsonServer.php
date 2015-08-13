@@ -12,19 +12,6 @@ use Symfony\Component\HttpFoundation\Response as Response;
  */
 class JsonServer
 {
-    /**
-     * Array of entities and ids, that need to retrieve
-     *
-     * @var array
-     */
-    private $params = [];
-
-    /**
-     * Path to resource
-     *
-     * @var string
-     */
-    private $path = "";
 
     /**
      * Request data
