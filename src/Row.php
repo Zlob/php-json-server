@@ -140,9 +140,11 @@ class Row
      */
     public function embedResources($resources)
     {
-        foreach($resources as $resource){
-            $tabName = $this->table->getTabName();
-            $this->embeddedResources[$resource] = $this->table->getDb()->$resource->filterByParent(['table' => $tabName, 'id' => $this->id]);
+        if($resources){
+            foreach($resources as $resource){
+                $tabName = $this->table->getTabName();
+                $this->embeddedResources[$resource] = $this->table->getDb()->$resource->filterByParent(['table' => $tabName, 'id' => $this->id]);
+            }
         }
     }
 
