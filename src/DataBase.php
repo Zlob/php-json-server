@@ -10,7 +10,7 @@ class DataBase
 {
 
     /**
-     *
+     * dataBase file
      *
      * @var resource
      */
@@ -27,6 +27,8 @@ class DataBase
      * Create instance of JsonDataBase
      *
      * @param $pathToFile
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
      */
     public function __construct($pathToFile)
     {
@@ -67,7 +69,7 @@ class DataBase
         foreach ($this->tables as $tabName => $table) {
             $result[$tabName] = $table->toArray();
         }
-
+        
         ftruncate($this->dbFile, 0);
         rewind($this->dbFile);
         fwrite($this->dbFile, json_encode($result, JSON_PRETTY_PRINT));
