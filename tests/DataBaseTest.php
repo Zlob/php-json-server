@@ -7,7 +7,7 @@ class DataBaseTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fixture = new \JsonServer\DataBase(getcwd().'/tests/Mock/pluralDB.json');
+        $this->fixture = new \JsonServer\DataBase(getcwd() . '/tests/Mock/pluralDB.json');
     }
 
     protected function tearDown()

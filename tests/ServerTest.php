@@ -10,10 +10,11 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
     {
         $this->fixture->__destruct();
     }
+
     /**
      * @dataProvider requestProviderSingular
      */
-    public function testRequestSingularSingular ($method, $url, $data, $expected, $msg)
+    public function testRequestSingularSingular($method, $url, $data, $expected, $msg)
     {
         $config = \JsonServer\Config::getInstance();
         $config->set('urlNamingForm', 'singularize');
@@ -28,7 +29,7 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider requestProviderSingular
      */
-    public function testRequestSingularPlural ($method, $url, $data, $expected, $msg)
+    public function testRequestSingularPlural($method, $url, $data, $expected, $msg)
     {
         $config = \JsonServer\Config::getInstance();
         $config->set('urlNamingForm', 'singularize');
@@ -53,7 +54,7 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider requestProviderPlural
      */
-    public function testRequestPluralSingular ($method, $url, $data, $expected, $msg)
+    public function testRequestPluralSingular($method, $url, $data, $expected, $msg)
     {
         $config = \JsonServer\Config::getInstance();
         $config->set('urlNamingForm', 'pluralize');
@@ -68,7 +69,7 @@ class JsonServerTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider requestProviderPlural
      */
-    public function testRequestPluralPlural ($method, $url, $data, $expected, $msg)
+    public function testRequestPluralPlural($method, $url, $data, $expected, $msg)
     {
         $config = \JsonServer\Config::getInstance();
         $config->set('urlNamingForm', 'pluralize');

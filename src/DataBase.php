@@ -33,7 +33,7 @@ class DataBase
     public function __construct($pathToFile)
     {
         $this->dbFile = fopen($pathToFile, 'r+b');
-        if(!$this->dbFile){
+        if (!$this->dbFile) {
             throw new \RuntimeException("cannot open file $pathToFile");
         }
         flock($this->dbFile, LOCK_EX);

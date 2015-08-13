@@ -94,14 +94,14 @@ class Row
      */
     public function toArray()
     {
-        if (Config::get('fieldsAutoSorting')){
-            uksort ($this->fields, Config::get('fieldsAutoSortingFunc'));
+        if (Config::get('fieldsAutoSorting')) {
+            uksort($this->fields, Config::get('fieldsAutoSortingFunc'));
         }
-        if($this->table){
+        if ($this->table) {
             $this->embedResources($this->table->getEmbeds());
         }
         $result = $this->fields;
-        foreach($this->embeddedResources as $resName=>$resource){
+        foreach ($this->embeddedResources as $resName => $resource) {
             $result[$resName] = $resource->toArray();
         }
         return $result;
@@ -125,8 +125,8 @@ class Row
      */
     public function search($q)
     {
-        foreach($this->fields as $field){
-            if(strpos($field, $q) !== false){
+        foreach ($this->fields as $field) {
+            if (strpos($field, $q) !== false) {
                 return true;
             }
         }
@@ -140,8 +140,8 @@ class Row
      */
     public function embedResources($resources)
     {
-        if($resources){
-            foreach($resources as $resource){
+        if ($resources) {
+            foreach ($resources as $resource) {
                 $tabName = $this->table->getTabName();
                 $this->embeddedResources[$resource] = $this->table->getDb()->$resource->filterByParent(['table' => $tabName, 'id' => $this->id]);
             }

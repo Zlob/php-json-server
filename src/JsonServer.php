@@ -35,7 +35,7 @@ class JsonServer
      */
     public function __construct()
     {
-        $this->jsonDb = new DataBase(__DIR__ .'/..'. Config::get('pathToDb'));
+        $this->jsonDb = new DataBase(__DIR__ . '/..' . Config::get('pathToDb'));
         $this->response = new Response();
         $this->response->headers->set('Content-Type', 'application/vnd.api+json');
     }
@@ -74,7 +74,7 @@ class JsonServer
      */
     public function GET($tabName, $id, $parent, $data)
     {
-        try{
+        try {
             $result = $this->jsonDb->$tabName->filterByParent($parent);
             $result = $this->processFilters($result);
             //fetching single resource
@@ -88,8 +88,7 @@ class JsonServer
                 $this->response->headers->set('X-Total-Count', $result->count());
                 $this->response->setStatusCode(200);
             }
-        }
-        catch(\OutOfRangeException $e){
+        } catch (\OutOfRangeException $e) {
             return call_user_func(Config::get('resourceNotFound'), $this->response);
         }
         return $this->response;
@@ -151,7 +150,7 @@ class JsonServer
     {
         if ($id) {
             $table = $this->jsonDb->$tabName;
-            try{
+            try {
                 $table->delete($id);
                 $this->jsonDb->save();
                 $this->response->setContent('');

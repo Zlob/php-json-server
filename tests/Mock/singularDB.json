@@ -1,28 +1,28 @@
 {
-    "post": [
-        {
-            "id": 1,
-            "title": "json-server",
-            "author": "zlob"
-        },
-        {
-            "id": 2,
-            "title": "json-server",
-            "author": "zlob"
-        }
-    ],
-    "comment": [
-        {
-            "id": 1,
-            "body": "some comment",
-            "post_id": 1
-        }
-    ],
-    "vote": [
-        {
-            "id": 1,
-            "rating": 1,
-            "comment_id": 1
-        }
-    ]
+  "post": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "zlob"
+    },
+    {
+      "id": 2,
+      "title": "json-server",
+      "author": "zlob"
+    }
+  ],
+  "comment": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "post_id": 1
+    }
+  ],
+  "vote": [
+    {
+      "id": 1,
+      "rating": 1,
+      "comment_id": 1
+    }
+  ]
 }

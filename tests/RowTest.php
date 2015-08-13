@@ -7,7 +7,7 @@ class RowTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fixture = new \JsonServer\Row(['id'=>0, 'field1' => 1, 'field2' => 'some string']);
+        $this->fixture = new \JsonServer\Row(['id' => 0, 'field1' => 1, 'field2' => 'some string']);
     }
 
     protected function tearDown()
@@ -28,17 +28,17 @@ class RowTest extends PHPUnit_Framework_TestCase
 
     public function testSetFields()
     {
-        $data = ['id'=>77, 'field1' => 11, 'field2' => 22];
+        $data = ['id' => 77, 'field1' => 11, 'field2' => 22];
         $this->fixture->setData($data);
-        $dataExpext = ['id'=>0, 'field1' => 11, 'field2' => 22];
+        $dataExpext = ['id' => 0, 'field1' => 11, 'field2' => 22];
         static::assertEquals($this->fixture->toArray(), $dataExpext, 'mass assignment trough setData is working');
     }
 
     public function testSortingFields()
     {
-        $data = ['field2' => 22, 'field1' => 11,'id'=>77 ];
+        $data = ['field2' => 22, 'field1' => 11, 'id' => 77];
         $this->fixture->setData($data);
-        $dataExpext = ['id'=>0, 'field1' => 11, 'field2' => 22];
+        $dataExpext = ['id' => 0, 'field1' => 11, 'field2' => 22];
         static::assertEquals($this->fixture->toArray(), $dataExpext, 'fields sorting correctly');
     }
 

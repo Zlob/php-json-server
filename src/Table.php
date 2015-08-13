@@ -152,7 +152,7 @@ class Table implements \ArrayAccess
     public function insert($data, $parent = null)
     {
         $row = new Row($data, $this);
-        if($parent){
+        if ($parent) {
             $parentName = $this->getParentKeyName($parent['table']);
             $row->$parentName = $parent['id'];
         }
@@ -204,7 +204,7 @@ class Table implements \ArrayAccess
         foreach ($this->rows as $row) {
             $ids[] = $row->id;
         }
-        if(count($ids) === 0){
+        if (count($ids) === 0) {
             return 1;
         }
         sort($ids);
@@ -329,7 +329,7 @@ class Table implements \ArrayAccess
     public function _order($order)
     {
         $order = mb_strtolower($order);
-        if($order !== 'asc' && $order !== 'desc' ){
+        if ($order !== 'asc' && $order !== 'desc') {
             throw new \DomainException ("Unknown sort type $order");
         }
         $this->sortOrder = $order;
@@ -344,7 +344,7 @@ class Table implements \ArrayAccess
      */
     public function _start($start)
     {
-        if( !is_numeric($start) || $start < 0){
+        if (!is_numeric($start) || $start < 0) {
             throw new \DomainException ("Start '$start' must be a positive integer");
         }
         $this->start = $start;
@@ -359,7 +359,7 @@ class Table implements \ArrayAccess
      */
     public function _end($end)
     {
-        if( !is_numeric($end) || $end < 0){
+        if (!is_numeric($end) || $end < 0) {
             throw new \DomainException ("end '$end'' must be a positive integer");
         }
         $this->end = $end;
@@ -374,7 +374,7 @@ class Table implements \ArrayAccess
      */
     public function _limit($limit)
     {
-        if( !is_numeric($limit) || $limit < 0){
+        if (!is_numeric($limit) || $limit < 0) {
             throw new \DomainException ("limit '$limit'' must be a positive integer");
         }
         $this->limit = $limit;
@@ -431,18 +431,18 @@ class Table implements \ArrayAccess
     {
         $sortField = $this->sortField;
         $sortOrder = $this->sortOrder;
-        $sortFunc = function($a, $b) use ( $sortField, $sortOrder ){
-            if ($a->$sortField === $b->$sortField){
+        $sortFunc = function ($a, $b) use ($sortField, $sortOrder) {
+            if ($a->$sortField === $b->$sortField) {
                 return 0;
             }
-            if ($a->$sortField > $b->$sortField){
+            if ($a->$sortField > $b->$sortField) {
                 return $sortOrder === 'asc' ? 1 : -1;
             }
-            if ($a->$sortField < $b->$sortField){
+            if ($a->$sortField < $b->$sortField) {
                 return $sortOrder === 'asc' ? -1 : 1;
             }
         };
-        usort ($this->rows, $sortFunc);
+        usort($this->rows, $sortFunc);
     }
 
     /**
@@ -454,7 +454,7 @@ class Table implements \ArrayAccess
     private function filter($callback)
     {
         $table = clone $this;
-        $table->rows = array_slice(array_filter($this->rows, $callback),0);
+        $table->rows = array_slice(array_filter($this->rows, $callback), 0);
         return $table;
     }
 
