@@ -49,30 +49,31 @@ class Table implements \ArrayAccess
      * start position
      * @var null
      */
-    private $start = null;
+    private $start;
 
     /**
      *  end position
      * @var null
      */
-    private $end = null;
+    private $end;
 
     /**
      *  result limit
      * @var null
      */
-    private $limit = null;
+    private $limit;
 
     /**
      *  embed resources
      * @var array
      */
-    private $embeds = [];
+    private $embeds;
 
     /**
      * Create a new JsonTable instance
      *
      * @param $data
+     * @throws \InvalidArgumentException
      */
     public function __construct($data, $tabName, &$db = null)
     {
@@ -111,7 +112,8 @@ class Table implements \ArrayAccess
      * Return row with id $id
      *
      * @param $id
-     * @return null
+     * @return \JsonServer\Row
+     * @throws \OutOfRangeException
      */
     public function find($id)
     {
@@ -144,6 +146,7 @@ class Table implements \ArrayAccess
      * Add new resource
      *
      * @param $data
+     * @param string $parent
      * @return int
      */
     public function insert($data, $parent = null)
@@ -163,6 +166,7 @@ class Table implements \ArrayAccess
      * @param $id
      * @param $data
      * @return int
+     * @throws \OutOfRangeException
      */
     public function update($id, $data)
     {
@@ -176,6 +180,7 @@ class Table implements \ArrayAccess
      *
      * @param $id
      * @return int
+     * @throws \OutOfRangeException
      */
     public function delete($id)
     {
@@ -221,9 +226,13 @@ class Table implements \ArrayAccess
             $result[] = $row->toArray();
         }
         return $result;
-
     }
 
+    /**
+     * Return json representation of table
+     *
+     * @return string
+     */
     public function getContent()
     {
         return json_encode($this->toArray());
@@ -231,6 +240,7 @@ class Table implements \ArrayAccess
 
     /**
      * Return count of rows in table
+     *
      * @return int
      */
     public function count()
@@ -239,7 +249,7 @@ class Table implements \ArrayAccess
     }
 
     /**
-     * @return null
+     * @return db
      */
     public function getDb()
     {
@@ -314,6 +324,7 @@ class Table implements \ArrayAccess
      * Set sorting order
      * @param $order
      * @return $this
+     * @throws \DomainException
      */
     public function _order($order)
     {
@@ -329,6 +340,7 @@ class Table implements \ArrayAccess
      * Set start param
      * @param $start
      * @return $this
+     * @throws \DomainException
      */
     public function _start($start)
     {
@@ -343,6 +355,7 @@ class Table implements \ArrayAccess
      * Set end param
      * @param $end
      * @return $this
+     * @throws \DomainException
      */
     public function _end($end)
     {
@@ -357,6 +370,7 @@ class Table implements \ArrayAccess
      * set limit param
      * @param $limit
      * @return $this
+     * @throws \DomainException
      */
     public function _limit($limit)
     {
@@ -381,6 +395,7 @@ class Table implements \ArrayAccess
 
     /**
      * @param $embedStr
+     * @return $this
      */
     public function _embed($embedStr)
     {
@@ -451,12 +466,8 @@ class Table implements \ArrayAccess
      */
     private function getParentKeyName($noun)
     {
-//        if (!(Config::get('urlNamingForm') === Config::get('relationsNamingForm'))) {
-            $method = Config::get('relationsNamingForm');
-            return Inflector\Inflector::$method($noun) . "_id";
-//        } else {
-//            return $noun . "_id";
-//        }
+        $method = Config::get('relationsNamingForm');
+        return Inflector\Inflector::$method($noun) . "_id";
     }
 
 

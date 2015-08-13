@@ -7,7 +7,7 @@ class RowTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fixture = new \JsonServer\Row(['id'=>0, 'field1' => 1, 'field2' => 2]);
+        $this->fixture = new \JsonServer\Row(['id'=>0, 'field1' => 1, 'field2' => 'some string']);
     }
 
     protected function tearDown()
@@ -54,6 +54,13 @@ class RowTest extends PHPUnit_Framework_TestCase
     public function testToArray()
     {
         static::assertArrayHasKey('field1', $this->fixture->toArray(), 'toArray is working');
+    }
+
+
+    public function testSearch()
+    {
+        static::assertTrue($this->fixture->search('string'));
+        static::assertFalse($this->fixture->search('fail'));
     }
 
 

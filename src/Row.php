@@ -19,9 +19,9 @@ class Row
     /**
      * Reference to the db class
      *
-     * @var null
+     * @var string
      */
-    private $table;
+    private $table = '';
 
     private $embeddedResources = [];
 
@@ -107,13 +107,19 @@ class Row
         return $result;
     }
 
+
+    /**
+     * Return json representation of row
+     *
+     * @return string
+     */
     public function getContent()
     {
         return json_encode($this->toArray());
     }
 
     /**
-     * search substring in all row fields
+     * Search substring in all row fields
      * @param $q
      * @return bool
      */
@@ -127,6 +133,11 @@ class Row
         return false;
     }
 
+    /**
+     * Fill row with embed resources
+     *
+     * @param $resources
+     */
     public function embedResources($resources)
     {
         foreach($resources as $resource){
