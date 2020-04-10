@@ -1,5 +1,5 @@
 
-#PHP JSON Server
+# PHP JSON Server
 
 Easy to use library, that provides you REST API server in a few minutes.
 Created for front-end developers who need a quick back-end for prototyping.
@@ -7,14 +7,14 @@ May be used with you lovely php web framework
 
 Inspired by [JSON Server](https://github.com/typicode/json-server) 
 
-####**NOT FOR PRODUCTION**
+#### **NOT FOR PRODUCTION**
 
 [![Latest Stable Version](https://poser.pugx.org/zlob/php-json-server/v/stable)](https://packagist.org/packages/zlob/php-json-server) 
 [![Total Downloads](https://poser.pugx.org/zlob/php-json-server/downloads)](https://packagist.org/packages/zlob/php-json-server)
 [![License](https://poser.pugx.org/zlob/php-json-server/license)](https://packagist.org/packages/zlob/php-json-server)
 [![Build Status](https://travis-ci.org/Zlob/php-json-server.svg?branch=master)](https://travis-ci.org/Zlob/php-json-server)
 
-##Install
+## Install
 
 via composer: ```composer require zlob/php-json-server```
 
@@ -123,7 +123,7 @@ GET /posts/1?_embed=comments
 GET /posts/1?_embed=comments,tags
 ```
 
-##CLI: Generate random data
+## CLI: Generate random data
 You can fill database with fake data in one command.
 In example, to create table posts, with 50 resources, that contains fields title, date, author and content,
 in jsonServer directory use command:
@@ -133,5 +133,5 @@ php-json-server faker posts 'title.text date.date author.name content.text.10' -
 Where where fields separated by space, and field name, field type and additional parameter separated by '.'
 Field type and parameters described in [faker](https://github.com/fzaninotto/Faker), that used inside.
 
-##License
+## License
 MIT - [Zlob](https://github.com/zlob)
