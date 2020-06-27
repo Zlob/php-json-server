@@ -18,7 +18,7 @@ Inspired by [JSON Server](https://github.com/typicode/json-server)
 
 via composer: ```composer require zlob/php-json-server```
 
-##Example
+## Example
 
 You can use this library with any php web framework. Here is example how to integrate it with Laravel 5.1:
 
